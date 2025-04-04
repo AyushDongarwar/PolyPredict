@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - PolyPredict</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/enhanced-styles.css">
+    <style>
+        .admin-header {
+            background-color: #2d3436;
+            color: white;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+
+        .admin-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background-color: white;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin: 10px 0;
+        }
+
+        .admin-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .action-card {
+            background-color: white;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .action-card h3 {
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .user-list,
+        .market-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .user-item,
+        .market-item {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .user-item:last-child,
+        .market-item:last-child {
+            border-bottom: none;
+        }
+
+        .user-email {
+            font-weight: 500;
+        }
+
+        .user-balance {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .market-title {
+            font-weight: 500;
+        }
+
+        .market-status {
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+        }
+
+        .admin-form {
+            margin-top: 20px;
+        }
+
+        .admin-form .form-group {
+            margin-bottom: 15px;
+        }
+
+        .admin-form label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .admin-form input,
+        .admin-form select,
+        .admin-form textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #dfe6e9;
+            border-radius: 5px;
+        }
+
+        .admin-form textarea {
+            min-height: 100px;
+        }
+
+        .admin-form button {
+            margin-top: 10px;
+        }
+
+        .outcome-inputs {
+            margin-top: 10px;
+        }
+
+        .outcome-input {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .outcome-input input {
+            flex: 1;
+        }
+
+        .add-outcome-btn {
+            margin-bottom: 15px;
+        }
+
+        /* Bet Management Styles */
+        .btn-sm {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.875rem;
+            line-height: 1.5;
+            border-radius: 0.2rem;
+        }
+
+        .table {
+            width: 100%;
+            margin-bottom: 1rem;
+            color: #212529;
+            border-collapse: collapse;
+        }
+
+        .table th,
+        .table td {
+            padding: 0.75rem;
+            vertical-align: top;
+            border-top: 1px solid #dee2e6;
+        }
+
+        .table thead th {
+            vertical-align: bottom;
+            border-bottom: 2px solid #dee2e6;
+            background-color: #f8f9fa;
+        }
+
+        .table-responsive {
+            display: block;
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .status-pending {
+            background-color: #ffeaa7;
+            color: #d35400;
+        }
+
+        .status-active {
+            background-color: #81ecec;
+            color: #00b894;
+        }
+
+        .status-won {
+            background-color: #55efc4;
+            color: #00b894;
+        }
+
+        .status-lost {
+            background-color: #fab1a0;
+            color: #d63031;
+        }
+
+        .status-resolved {
+            background-color: #55efc4;
+            color: #00b894;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="index.html" class="logo">PolyPredict</a>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="dashboard.html">Markets</a></li>
+                    <li><a href="token.html">Tokens</a></li>
+                    <li><a href="admin.html" class="active">Admin</a></li>
+                </ul>
+                <div class="wallet-btn">
+                    <button id="logout-btn" class="btn btn-outline">Logout</button>
+                    <span id="admin-badge"
+                        style="background-color: #d63031; color: white; padding: 5px 10px; border-radius: 5px; margin-right: 10px;">Admin</span>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Admin Dashboard -->
+    <div class="container" style="padding: 40px 20px;">
+        <div class="admin-header">
+            <h2>Admin Dashboard</h2>
+            <p>Welcome to the PolyPredict admin panel. Manage users, markets, and platform settings.</p>
+        </div>
+
+        <!-- Stats Overview -->
+        <h3>Platform Overview</h3>
+        <div class="admin-stats">
+            <div class="stat-card">
+                <h4>Total Users</h4>
+                <div class="stat-value" id="total-users">0</div>
+                <p>Registered accounts</p>
+            </div>
+            <div class="stat-card">
+                <h4>Active Markets</h4>
+                <div class="stat-value" id="active-markets">3</div>
+                <p>Open for betting</p>
+            </div>
+            <div class="stat-card">
+                <h4>Total Tokens</h4>
+                <div class="stat-value" id="total-tokens">0</div>
+                <p>In circulation</p>
+            </div>
+            <div class="stat-card">
+                <h4>Platform Revenue</h4>
+                <div class="stat-value" id="platform-revenue">$0</div>
+                <p>From fees</p>
+            </div>
+        </div>
+
+        <!-- Admin Actions -->
+        <div class="admin-actions">
+            <!-- User Management -->
+            <div class="action-card">
+                <h3>User Management</h3>
+                <div class="user-list" id="user-list">
+                    <!-- User items will be added here dynamically -->
+                    <div class="user-item">
+                        <span class="user-email">Loading users...</span>
+                    </div>
+                </div>
+                <div class="admin-form">
+                    <h4>Add Tokens to User</h4>
+                    <div class="form-group">
+                        <label for="user-email">User Email</label>
+                        <select id="user-email" class="form-control">
+                            <option value="">Select a user</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="token-amount">Token Amount</label>
+                        <input type="number" id="token-amount" class="form-control" min="1" placeholder="Enter amount">
+                    </div>
+                    <button id="add-tokens-btn" class="btn btn-primary">Add Tokens</button>
+                </div>
+            </div>
+
+            <!-- Dashboard Link -->
+            <div class="action-card" style="margin-bottom: 20px;">
+                <h3>View Dashboard</h3>
+                <p style="margin-bottom: 15px;">Go to the dashboard to see how your bets appear to users</p>
+                <a href="dashboard.html" class="btn btn-primary"
+                    style="display: inline-block; padding: 10px 20px; background-color: #6c5ce7; color: white; text-decoration: none; border-radius: 5px; font-weight: 500;">Open
+                    Dashboard</a>
+            </div>
+
+            <!-- Add Crypto Markets -->
+            <div class="action-card" style="margin-bottom: 20px;">
+                <h3>Add Example Crypto Markets</h3>
+                <p style="margin-bottom: 15px;">Add 10 example cryptocurrency markets with random bets</p>
+                <button id="add-crypto-markets-btn" class="btn btn-primary"
+                    style="display: inline-block; padding: 10px 20px; background-color: #00b894; color: white; border: none; border-radius: 5px; font-weight: 500; cursor: pointer;">Add
+                    Crypto Markets</button>
+            </div>
+
+            <!-- Manage Crypto Markets -->
+            <div class="action-card" style="margin-bottom: 20px;">
+                <h3>Manage Crypto Markets</h3>
+                <p style="margin-bottom: 15px;">Control all crypto markets from the dashboard</p>
+                <a href="dashboard.html" class="btn btn-primary"
+                    style="display: inline-block; padding: 10px 20px; background-color: #f0932b; color: white; text-decoration: none; border-radius: 5px; font-weight: 500;">Go
+                    to Crypto Markets</a>
+            </div>
+
+            <!-- Market Management -->
+            <div class="action-card">
+                <h3>Market Management</h3>
+                <div class="market-list" id="market-list">
+                    <!-- Market items will be added here dynamically -->
+                    <div class="market-item">
+                        <span class="market-title">US Presidential Election 2024</span>
+                        <span class="market-status status-open">Open</span>
+                    </div>
+                    <div class="market-item">
+                        <span class="market-title">Bitcoin Price End of 2024</span>
+                        <span class="market-status status-open">Open</span>
+                    </div>
+                    <div class="market-item">
+                        <span class="market-title">Super Bowl Winner 2025</span>
+                        <span class="market-status status-open">Open</span>
+                    </div>
+                </div>
+                <div class="admin-form">
+                    <h4>Resolve Market</h4>
+                    <div class="form-group">
+                        <label for="market-id">Market</label>
+                        <select id="market-id" class="form-control">
+                            <option value="">Select a market</option>
+                            <option value="1">US Presidential Election 2024</option>
+                            <option value="2">Bitcoin Price End of 2024</option>
+                            <option value="3">Super Bowl Winner 2025</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="winning-outcome">Winning Outcome</label>
+                        <select id="winning-outcome" class="form-control">
+                            <option value="">Select an outcome</option>
+                        </select>
+                    </div>
+                    <button id="resolve-market-btn" class="btn btn-primary">Resolve Market</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Create New Market -->
+        <div class="action-card">
+            <h3>Create New Market</h3>
+            <div class="admin-form">
+                <div class="form-group">
+                    <label for="new-market-title">Market Title</label>
+                    <input type="text" id="new-market-title" class="form-control" placeholder="Enter market title">
+                </div>
+                <div class="form-group">
+                    <label for="new-market-description">Description</label>
+                    <textarea id="new-market-description" class="form-control"
+                        placeholder="Enter market description"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="new-market-category">Category</label>
+                    <select id="new-market-category" class="form-control">
+                        <option value="Politics">Politics</option>
+                        <option value="Crypto">Crypto</option>
+                        <option value="Sports">Sports</option>
+                        <option value="Entertainment">Entertainment</option>
+                        <option value="Economics">Economics</option>
+                        <option value="Technology">Technology</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="new-market-end-date">End Date</label>
+                    <input type="datetime-local" id="new-market-end-date" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Outcomes</label>
+                    <div class="outcome-inputs" id="outcome-inputs">
+                        <div class="outcome-input"
+                            style="display: flex; gap: 10px; margin-bottom: 15px; align-items: center;">
+                            <div style="flex: 3;">
+                                <label style="display: block; margin-bottom: 5px; font-weight: 500;">Outcome
+                                    Name</label>
+                                <input type="text" class="outcome-name" placeholder="e.g., Republican"
+                                    style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                            </div>
+                            <div style="flex: 1;">
+                                <label style="display: block; margin-bottom: 5px; font-weight: 500;">Odds</label>
+                                <input type="number" class="outcome-odds" placeholder="e.g., 1.8" min="1" step="0.1"
+                                    style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                            </div>
+                            <div style="align-self: flex-end;">
+                                <button type="button" class="remove-outcome-btn"
+                                    style="background-color: #ff7675; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; margin-bottom: 5px; display: none;">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="outcome-input"
+                            style="display: flex; gap: 10px; margin-bottom: 15px; align-items: center;">
+                            <div style="flex: 3;">
+                                <label style="display: block; margin-bottom: 5px; font-weight: 500;">Outcome
+                                    Name</label>
+                                <input type="text" class="outcome-name" placeholder="e.g., Democrat"
+                                    style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                            </div>
+                            <div style="flex: 1;">
+                                <label style="display: block; margin-bottom: 5px; font-weight: 500;">Odds</label>
+                                <input type="number" class="outcome-odds" placeholder="e.g., 2.1" min="1" step="0.1"
+                                    style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                            </div>
+                            <div style="align-self: flex-end;">
+                                <button type="button" class="remove-outcome-btn"
+                                    style="background-color: #ff7675; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; margin-bottom: 5px;">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" id="add-outcome-btn" class="btn btn-outline add-outcome-btn"
+                        style="margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 5px;">
+                        <i class="fas fa-plus"></i> Add Another Outcome
+                    </button>
+                    <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+                        <h4 style="margin-top: 0;">Outcome Guidelines</h4>
+                        <ul style="margin-bottom: 0;">
+                            <li>Add at least 2 possible outcomes for your market</li>
+                            <li>Odds represent the multiplier for winning bets (e.g., 2.0 means doubling the bet)</li>
+                            <li>Make sure outcome names are clear and unambiguous</li>
+                            <li>Consider adding an "Other" option for outcomes not explicitly listed</li>
+                        </ul>
+                    </div>
+                </div>
+                <button id="create-market-btn" class="btn btn-primary">Create Market</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-links">
+                    <h4>PolyPredict</h4>
+                    <p>A decentralized prediction market platform built on Ethereum blockchain.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="dashboard.html">Markets</a></li>
+                        <li><a href="token.html">Tokens</a></li>
+                        <li><a href="admin.html">Admin</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Connect With Us</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-discord"></i></a>
+                        <a href="#"><i class="fab fa-telegram"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 PolyPredict. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/betting.js"></script>
+    <script src="js/admin-tools.js"></script>
+    <script src="js/security.js"></script>
+    <script src="js/admin-market-manager.js"></script>
+    <script src="js/admin-bet-manager.js"></script>
+    <script src="js/direct-market-manager.js"></script>
+    <script src="js/add-crypto-markets.js"></script>
+    <script src="js/fix-admin.js"></script>
+    <script>
+        // Check if user is logged in and is admin
+        const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+
+        // Redirect if not admin
+        if (!currentUser || !currentUser.isAdmin) {
+            alert('Access denied. Admin privileges required.');
+            window.location.href = 'index.html';
+        }
+
+        // Logout functionality
+        document.getElementById('logout-btn').addEventListener('click', function () {
+            sessionStorage.removeItem('currentUser');
+            window.location.href = 'index.html';
+        });
+
+        // Load users
+        function loadUsers() {
+            const users = JSON.parse(localStorage.getItem('polypredict_users') || '[]');
+            const userList = document.getElementById('user-list');
+            const userSelect = document.getElementById('user-email');
+
+            // Protect user data before displaying
+            const protectedUsers = typeof protectUserData === 'function' ?
+                users.map(user => protectUserData(user, false)) :
+                users.map(user => {
+                    // Fallback protection if security.js isn't loaded
+                    const protectedUser = { ...user };
+                    delete protectedUser.password;
+                    delete protectedUser.dob;
+                    delete protectedUser.walletAddress;
+                    return protectedUser;
+                });
+
+            // Clear existing content
+            userList.innerHTML = '';
+
+            // Clear select options except the first one
+            userSelect.innerHTML = '<option value="">Select a user</option>';
+
+            // Calculate total tokens
+            let totalTokens = 0;
+
+            // Add users to list and select
+            users.forEach(user => {
+                // Add to user list
+                const userItem = document.createElement('div');
+                userItem.className = 'user-item';
+
+                const userEmail = document.createElement('span');
+                userEmail.className = 'user-email';
+                userEmail.textContent = user.email;
+
+                const userBalance = document.createElement('span');
+                userBalance.className = 'user-balance';
+                userBalance.textContent = `${user.tokenBalance} PTK`;
+
+                userItem.appendChild(userEmail);
+                userItem.appendChild(userBalance);
+                userList.appendChild(userItem);
+
+                // Add to select
+                const option = document.createElement('option');
+                option.value = user.email;
+                option.textContent = user.email;
+                userSelect.appendChild(option);
+
+                // Add to total tokens
+                totalTokens += user.tokenBalance;
+            });
+
+            // Update stats
+            document.getElementById('total-users').textContent = users.length;
+            document.getElementById('total-tokens').textContent = totalTokens.toLocaleString();
+        }
+
+        // Add tokens to user
+        document.getElementById('add-tokens-btn').addEventListener('click', function () {
+            const userEmail = document.getElementById('user-email').value;
+            const tokenAmount = parseInt(document.getElementById('token-amount').value);
+
+            if (!userEmail) {
+                alert('Please select a user');
+                return;
+            }
+
+            if (!tokenAmount || tokenAmount <= 0) {
+                alert('Please enter a valid token amount');
+                return;
+            }
+
+            // Get users from storage
+            const users = JSON.parse(localStorage.getItem('polypredict_users') || '[]');
+
+            // Find user
+            const userIndex = users.findIndex(u => u.email === userEmail);
+            if (userIndex === -1) {
+                alert('User not found');
+                return;
+            }
+
+            // Add tokens
+            users[userIndex].tokenBalance += tokenAmount;
+
+            // Add transaction
+            if (!users[userIndex].transactions) {
+                users[userIndex].transactions = [];
+            }
+
+            users[userIndex].transactions.unshift({
+                id: Date.now().toString(),
+                type: 'Admin Allocation',
+                amount: tokenAmount,
+                date: new Date().toISOString(),
+                status: 'Completed'
+            });
+
+            // Save to storage
+            localStorage.setItem('polypredict_users', JSON.stringify(users));
+
+            // Reload users
+            loadUsers();
+
+            // Reset form
+            document.getElementById('token-amount').value = '';
+
+            alert(`Successfully added ${tokenAmount} tokens to ${userEmail}`);
+        });
+
+        // Market management
+        const marketId = document.getElementById('market-id');
+        const winningOutcome = document.getElementById('winning-outcome');
+
+        // Update outcomes when market is selected
+        marketId.addEventListener('change', function () {
+            const selectedMarketId = this.value;
+
+            // Clear existing options
+            winningOutcome.innerHTML = '<option value="">Select an outcome</option>';
+
+            if (!selectedMarketId) return;
+
+            // Get market data (in a real app, this would come from the database)
+            let outcomes = [];
+
+            switch (selectedMarketId) {
+                case '1': // US Presidential Election
+                    outcomes = ['Republican', 'Democrat', 'Other'];
+                    break;
+                case '2': // Bitcoin Price
+                    outcomes = ['Under $50,000', '$50,000 - $100,000', 'Over $100,000'];
+                    break;
+                case '3': // Super Bowl
+                    outcomes = ['Kansas City Chiefs', 'San Francisco 49ers', 'Dallas Cowboys', 'Other'];
+                    break;
+            }
+
+            // Add outcomes to select
+            outcomes.forEach(outcome => {
+                const option = document.createElement('option');
+                option.value = outcome;
+                option.textContent = outcome;
+                winningOutcome.appendChild(option);
+            });
+        });
+
+        // Resolve market
+        document.getElementById('resolve-market-btn').addEventListener('click', function () {
+            const selectedMarketId = marketId.value;
+            const selectedOutcome = winningOutcome.value;
+
+            if (!selectedMarketId) {
+                alert('Please select a market');
+                return;
+            }
+
+            if (!selectedOutcome) {
+                alert('Please select a winning outcome');
+                return;
+            }
+
+            // Call the resolveMarket function from betting.js
+            const result = resolveMarket(selectedMarketId, selectedOutcome);
+
+            if (result) {
+                alert(`Market ${selectedMarketId} resolved with winning outcome: ${selectedOutcome}. Winnings have been distributed to users.`);
+
+                // Update market list
+                const marketItems = document.querySelectorAll('.market-item');
+                marketItems.forEach((item, index) => {
+                    if (index === parseInt(selectedMarketId) - 1) {
+                        const statusSpan = item.querySelector('.market-status');
+                        statusSpan.textContent = 'Resolved';
+                        statusSpan.className = 'market-status status-resolved';
+                    }
+                });
+
+                // Update platform revenue
+                const market = bettingState.markets[selectedMarketId];
+                if (market && market.platformEarnings) {
+                    const platformRevenue = document.getElementById('platform-revenue');
+                    const currentRevenue = parseFloat(platformRevenue.textContent.replace('$', '')) || 0;
+                    platformRevenue.textContent = '$' + (currentRevenue + market.platformEarnings).toFixed(2);
+                }
+
+                // Reload users to update token balances
+                loadUsers();
+            } else {
+                alert('Failed to resolve market. Please try again.');
+            }
+
+            // Reset form
+            marketId.value = '';
+            winningOutcome.innerHTML = '<option value="">Select an outcome</option>';
+        });
+
+        // Add outcome
+        document.getElementById('add-outcome-btn').addEventListener('click', function () {
+            const outcomeInputs = document.getElementById('outcome-inputs');
+
+            const outcomeInput = document.createElement('div');
+            outcomeInput.className = 'outcome-input';
+            outcomeInput.style.display = 'flex';
+            outcomeInput.style.gap = '10px';
+            outcomeInput.style.marginBottom = '15px';
+            outcomeInput.style.alignItems = 'center';
+
+            outcomeInput.innerHTML = `
+                <div style="flex: 3;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: 500;">Outcome Name</label>
+                    <input type="text" class="outcome-name" placeholder="e.g., Other" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                </div>
+                <div style="flex: 1;">
+                    <label style="display: block; margin-bottom: 5px; font-weight: 500;">Odds</label>
+                    <input type="number" class="outcome-odds" placeholder="e.g., 3.0" min="1" step="0.1" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                </div>
+                <div style="align-self: flex-end;">
+                    <button type="button" class="remove-outcome-btn" style="background-color: #ff7675; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; margin-bottom: 5px;">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+
+            outcomeInputs.appendChild(outcomeInput);
+
+            // Add event listener to the remove button
+            const removeBtn = outcomeInput.querySelector('.remove-outcome-btn');
+            removeBtn.addEventListener('click', function () {
+                outcomeInput.remove();
+            });
+        });
+
+        // Add event listeners to existing remove buttons
+        document.querySelectorAll('.remove-outcome-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                // Get the parent outcome input
+                const outcomeInput = this.closest('.outcome-input');
+
+                // Check if we have more than 2 outcomes
+                const totalOutcomes = document.querySelectorAll('.outcome-input').length;
+                if (totalOutcomes > 2) {
+                    outcomeInput.remove();
+                } else {
+                    alert('You need at least 2 outcomes for a market');
+                }
+            });
+        });
+
+        // Create market
+        document.getElementById('create-market-btn').addEventListener('click', function () {
+            const title = document.getElementById('new-market-title').value;
+            const description = document.getElementById('new-market-description').value;
+            const category = document.getElementById('new-market-category').value;
+            const endDate = document.getElementById('new-market-end-date').value;
+
+            if (!title || !description || !category || !endDate) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            // Get outcomes
+            const outcomeInputs = document.querySelectorAll('.outcome-input');
+            const outcomes = [];
+            let hasEmptyOutcomes = false;
+
+            outcomeInputs.forEach(input => {
+                const name = input.querySelector('.outcome-name').value;
+                const odds = input.querySelector('.outcome-odds').value;
+
+                if (name && odds) {
+                    outcomes.push({ name, odds: parseFloat(odds) });
+                } else if (name || odds) {
+                    // If one field is filled but not the other
+                    hasEmptyOutcomes = true;
+
+                    // Highlight the empty field
+                    if (!name) {
+                        input.querySelector('.outcome-name').style.borderColor = '#ff7675';
+                    }
+                    if (!odds) {
+                        input.querySelector('.outcome-odds').style.borderColor = '#ff7675';
+                    }
+                }
+            });
+
+            if (hasEmptyOutcomes) {
+                alert('Please complete all outcome fields (both name and odds)');
+                return;
+            }
+
+            if (outcomes.length < 2) {
+                alert('Please add at least 2 complete outcomes');
+                return;
+            }
+
+            // In a real app, this would save to the database
+            alert(`Market "${title}" created successfully with ${outcomes.length} outcomes`);
+
+            // Add to market list
+            const marketList = document.getElementById('market-list');
+            const marketItem = document.createElement('div');
+            marketItem.className = 'market-item';
+
+            const marketTitle = document.createElement('span');
+            marketTitle.className = 'market-title';
+            marketTitle.textContent = title;
+
+            const marketStatus = document.createElement('span');
+            marketStatus.className = 'market-status status-open';
+            marketStatus.textContent = 'Open';
+
+            marketItem.appendChild(marketTitle);
+            marketItem.appendChild(marketStatus);
+            marketList.appendChild(marketItem);
+
+            // Update active markets count
+            const activeMarkets = document.getElementById('active-markets');
+            activeMarkets.textContent = parseInt(activeMarkets.textContent) + 1;
+
+            // Reset form
+            document.getElementById('new-market-title').value = '';
+            document.getElementById('new-market-description').value = '';
+            document.getElementById('new-market-category').value = 'Politics';
+            document.getElementById('new-market-end-date').value = '';
+
+            // Reset outcomes (keep first two)
+            const outcomeInputsContainer = document.getElementById('outcome-inputs');
+            while (outcomeInputsContainer.children.length > 2) {
+                outcomeInputsContainer.removeChild(outcomeInputsContainer.lastChild);
+            }
+
+            // Clear outcome inputs
+            outcomeInputsContainer.querySelectorAll('input').forEach(input => {
+                input.value = '';
+            });
+        });
+
+        // Initialize
+        loadUsers();
+    </script>
+</body>
+
+</html>

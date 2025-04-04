@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buy Tokens - PolyPredict</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/enhanced-styles.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="index.html" class="logo">PolyPredict</a>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="dashboard.html">Markets</a></li>
+                    <li><a href="token.html" class="active">Tokens</a></li>
+                    <li><a href="index.html#about">About</a></li>
+                </ul>
+                <div class="wallet-btn">
+                    <a href="login.html" class="btn btn-outline">Login</a>
+                    <button class="btn btn-primary connect-wallet-btn">Connect Wallet</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Token Purchase Section -->
+    <div class="container token-purchase-container">
+        <h2>Purchase Tokens</h2>
+
+        <!-- Token Information -->
+        <div class="token-info">
+            <div class="token-info-header">
+                <div class="token-icon">
+                    <i class="fas fa-coins"></i>
+                </div>
+                <div>
+                    <h3>PolyPredict Token (PTK)</h3>
+                    <p>The official token for betting on PolyPredict platform</p>
+                </div>
+            </div>
+
+            <p>PolyPredict Tokens (PTK) are used for placing bets on our prediction markets. Each token is valued at $1
+                USD or 1 USDT on the Ethereum blockchain.</p>
+
+            <div class="token-details" style="margin-bottom: 30px;">
+                <div class="token-detail-item">
+                    <p>Current Price</p>
+                    <div class="token-detail-value">$1.00</div>
+                </div>
+                <div class="token-detail-item"
+                    style="background-color: #f0fff4; border: 1px solid #c6f6d5; box-shadow: 0 4px 6px rgba(0,0,0,0.05); transform: scale(1.05);">
+                    <p style="font-weight: 500;">Your Balance</p>
+                    <div class="token-detail-value token-balance-display" id="user-token-balance"
+                        style="color: #38a169; font-size: 2rem; font-weight: 600;">1,000 PTK</div>
+                </div>
+                <div class="token-detail-item">
+                    <p>Total Supply</p>
+                    <div class="token-detail-value">10,000,000</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Purchase Options -->
+        <div class="purchase-options">
+            <div class="purchase-tabs">
+                <div class="purchase-tab active" data-tab="fiat">Pay with Fiat</div>
+                <div class="purchase-tab" data-tab="crypto">Pay with Crypto</div>
+            </div>
+
+            <!-- Fiat Purchase -->
+            <div id="fiat-content" class="purchase-content">
+                <form>
+                    <h3>Purchase tokens using USD</h3>
+
+                    <div class="form-group">
+                        <label for="fiat-amount">Amount (USD)</label>
+                        <div class="amount-input">
+                            <input type="number" id="fiat-amount" min="10" placeholder="Enter amount" required>
+                            <span class="currency">USD</span>
+                        </div>
+                        <p>You will receive: <span id="fiat-token-amount">0</span> PTK</p>
+                    </div>
+
+                    <div class="amount-presets">
+                        <div class="amount-preset" data-amount="50" data-target="fiat-amount">$50</div>
+                        <div class="amount-preset" data-amount="100" data-target="fiat-amount">$100</div>
+                        <div class="amount-preset" data-amount="250" data-target="fiat-amount">$250</div>
+                        <div class="amount-preset" data-amount="500" data-target="fiat-amount">$500</div>
+                    </div>
+
+                    <div class="purchase-summary">
+                        <h4>Purchase Summary</h4>
+                        <div class="summary-item">
+                            <span>Token Amount:</span>
+                            <span class="token-amount">0 PTK</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Processing Fee (2%):</span>
+                            <span class="fee-amount">$0.00</span>
+                        </div>
+                        <div class="summary-total">
+                            <span>Total:</span>
+                            <span class="total-amount">$0.00</span>
+                        </div>
+                    </div>
+
+                    <div class="payment-methods">
+                        <h4>Payment Method</h4>
+                        <div class="payment-method active" data-method="card">
+                            <div class="payment-method-icon">
+                                <i class="fas fa-credit-card"></i>
+                            </div>
+                            <div>
+                                <h4>Credit/Debit Card</h4>
+                                <p>Visa, Mastercard, American Express</p>
+                            </div>
+                        </div>
+                        <div class="payment-method" data-method="paypal">
+                            <div class="payment-method-icon">
+                                <i class="fab fa-paypal"></i>
+                            </div>
+                            <div>
+                                <h4>PayPal</h4>
+                                <p>Pay using your PayPal account</p>
+                            </div>
+                        </div>
+                        <div class="payment-method" data-method="bank">
+                            <div class="payment-method-icon">
+                                <i class="fas fa-university"></i>
+                            </div>
+                            <div>
+                                <h4>Bank Transfer</h4>
+                                <p>Direct bank transfer (ACH/Wire)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary purchase-btn" data-type="fiat"
+                        style="width: 100%; background-color: #00b894; font-size: 1.1rem; font-weight: 500; padding: 12px; margin-top: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">Purchase
+                        Tokens</button>
+                </form>
+            </div>
+
+            <!-- Crypto Purchase -->
+            <div id="crypto-content" class="purchase-content hidden">
+                <form>
+                    <h3>Purchase tokens using USDT</h3>
+
+                    <div class="form-group">
+                        <label for="crypto-amount">Amount (USDT)</label>
+                        <div class="amount-input">
+                            <input type="number" id="crypto-amount" min="10" placeholder="Enter amount" required>
+                            <span class="currency">USDT</span>
+                        </div>
+                        <p>You will receive: <span id="crypto-token-amount">0</span> PTK</p>
+                    </div>
+
+                    <div class="amount-presets">
+                        <div class="amount-preset" data-amount="50" data-target="crypto-amount">50 USDT</div>
+                        <div class="amount-preset" data-amount="100" data-target="crypto-amount">100 USDT</div>
+                        <div class="amount-preset" data-amount="250" data-target="crypto-amount">250 USDT</div>
+                        <div class="amount-preset" data-amount="500" data-target="crypto-amount">500 USDT</div>
+                    </div>
+
+                    <div class="purchase-summary">
+                        <h4>Purchase Summary</h4>
+                        <div class="summary-item">
+                            <span>Token Amount:</span>
+                            <span class="token-amount">0 PTK</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Gas Fee (estimated):</span>
+                            <span class="fee-amount">0.00 USDT</span>
+                        </div>
+                        <div class="summary-total">
+                            <span>Total:</span>
+                            <span class="total-amount">0.00 USDT</span>
+                        </div>
+                    </div>
+
+                    <div class="payment-methods">
+                        <h4>Wallet</h4>
+                        <div class="payment-method active" data-method="metamask">
+                            <div class="payment-method-icon">
+                                <i class="fas fa-fox"></i>
+                            </div>
+                            <div>
+                                <h4>MetaMask</h4>
+                                <p>Pay using MetaMask wallet</p>
+                            </div>
+                        </div>
+                        <div class="payment-method" data-method="phantom">
+                            <div class="payment-method-icon">
+                                <i class="fas fa-ghost"></i>
+                            </div>
+                            <div>
+                                <h4>Phantom</h4>
+                                <p>Pay using Phantom wallet</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary purchase-btn" data-type="crypto"
+                        style="width: 100%; background-color: #00b894; font-size: 1.1rem; font-weight: 500; padding: 12px; margin-top: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">Purchase
+                        Tokens</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Transaction History -->
+        <div class="card" style="margin-top: 40px;">
+            <h3>Transaction History</h3>
+            <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+                <thead>
+                    <tr style="border-bottom: 1px solid #dfe6e9;">
+                        <th style="text-align: left; padding: 10px;">Date</th>
+                        <th style="text-align: left; padding: 10px;">Type</th>
+                        <th style="text-align: left; padding: 10px;">Amount</th>
+                        <th style="text-align: left; padding: 10px;">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="border-bottom: 1px solid #dfe6e9;">
+                        <td style="padding: 10px;">2024-05-15</td>
+                        <td style="padding: 10px;">Purchase (Credit Card)</td>
+                        <td style="padding: 10px;">+500 PTK</td>
+                        <td style="padding: 10px; color: #00b894;">Completed</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #dfe6e9;">
+                        <td style="padding: 10px;">2024-05-10</td>
+                        <td style="padding: 10px;">Bet Winnings</td>
+                        <td style="padding: 10px;">+250 PTK</td>
+                        <td style="padding: 10px; color: #00b894;">Completed</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #dfe6e9;">
+                        <td style="padding: 10px;">2024-05-08</td>
+                        <td style="padding: 10px;">Bet Placement</td>
+                        <td style="padding: 10px;">-100 PTK</td>
+                        <td style="padding: 10px; color: #00b894;">Completed</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px;">2024-05-01</td>
+                        <td style="padding: 10px;">Purchase (USDT)</td>
+                        <td style="padding: 10px;">+350 PTK</td>
+                        <td style="padding: 10px; color: #00b894;">Completed</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-links">
+                    <h4>PolyPredict</h4>
+                    <p>A decentralized prediction market platform built on Ethereum blockchain.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="dashboard.html">Markets</a></li>
+                        <li><a href="token.html">Tokens</a></li>
+                        <li><a href="index.html#about">About</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Connect With Us</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-discord"></i></a>
+                        <a href="#"><i class="fab fa-telegram"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 PolyPredict. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script>
+        // Check if user is logged in
+        const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+
+        // Update UI with user data
+        function updateUserUI() {
+            if (currentUser) {
+                // Update token balance display in all locations
+                const tokenDetailValue = document.getElementById('user-token-balance');
+                if (tokenDetailValue) {
+                    tokenDetailValue.textContent = `${currentUser.tokenBalance.toLocaleString()} PTK`;
+                }
+
+                // Also update any other token balance displays on the page
+                const otherTokenDisplays = document.querySelectorAll('.token-balance-display');
+                otherTokenDisplays.forEach(display => {
+                    display.textContent = `${currentUser.tokenBalance.toLocaleString()} PTK`;
+                });
+
+                // Hide login button if user is logged in
+                const loginBtn = document.querySelector('a[href="login.html"]');
+                if (loginBtn) {
+                    loginBtn.style.display = 'none';
+                }
+
+                // Add logout button
+                const walletBtnContainer = document.querySelector('.wallet-btn');
+                if (walletBtnContainer) {
+                    // Check if logout button already exists
+                    if (!document.querySelector('#logout-btn')) {
+                        const logoutBtn = document.createElement('button');
+                        logoutBtn.id = 'logout-btn';
+                        logoutBtn.className = 'btn btn-outline';
+                        logoutBtn.textContent = 'Logout';
+                        logoutBtn.style.marginRight = '10px';
+                        logoutBtn.addEventListener('click', function () {
+                            // Clear user session
+                            sessionStorage.removeItem('currentUser');
+                            // Redirect to home page
+                            window.location.href = 'index.html';
+                        });
+
+                        walletBtnContainer.insertBefore(logoutBtn, walletBtnContainer.firstChild);
+                    }
+                }
+
+                // Update transaction history if user has transactions
+                if (currentUser.transactions && currentUser.transactions.length > 0) {
+                    const transactionTableBody = document.querySelector('table tbody');
+                    if (transactionTableBody) {
+                        // Clear existing rows
+                        transactionTableBody.innerHTML = '';
+
+                        // Add user transactions
+                        currentUser.transactions.forEach(transaction => {
+                            const row = document.createElement('tr');
+                            row.style.borderBottom = '1px solid #dfe6e9';
+
+                            // Format date
+                            const date = new Date(transaction.date);
+                            const formattedDate = date.toISOString().split('T')[0];
+
+                            // Create table cells
+                            const dateCell = document.createElement('td');
+                            dateCell.style.padding = '10px';
+                            dateCell.textContent = formattedDate;
+
+                            const typeCell = document.createElement('td');
+                            typeCell.style.padding = '10px';
+                            typeCell.textContent = transaction.type;
+
+                            const amountCell = document.createElement('td');
+                            amountCell.style.padding = '10px';
+                            amountCell.textContent = `${transaction.amount > 0 ? '+' : ''}${transaction.amount} PTK`;
+
+                            const statusCell = document.createElement('td');
+                            statusCell.style.padding = '10px';
+                            statusCell.style.color = '#00b894';
+                            statusCell.textContent = transaction.status;
+
+                            // Append cells to row
+                            row.appendChild(dateCell);
+                            row.appendChild(typeCell);
+                            row.appendChild(amountCell);
+                            row.appendChild(statusCell);
+
+                            // Append row to table
+                            transactionTableBody.appendChild(row);
+                        });
+                    }
+                }
+            } else {
+                // Redirect to login page if not logged in
+                window.location.href = 'login.html';
+            }
+        }
+
+        // Call the function to update UI
+        updateUserUI();
+
+        // Add admin link if user is admin
+        if (currentUser && currentUser.isAdmin) {
+            // Add admin link to nav
+            const navLinks = document.querySelector('.nav-links');
+            if (navLinks) {
+                const adminLi = document.createElement('li');
+                const adminLink = document.createElement('a');
+                adminLink.href = 'admin.html';
+                adminLink.textContent = 'Admin';
+                adminLi.appendChild(adminLink);
+                navLinks.appendChild(adminLi);
+            }
+
+            // Add admin badge
+            const walletBtnContainer = document.querySelector('.wallet-btn');
+            if (walletBtnContainer && !document.querySelector('#admin-badge')) {
+                const adminBadge = document.createElement('span');
+                adminBadge.id = 'admin-badge';
+                adminBadge.textContent = 'Admin';
+                adminBadge.style.backgroundColor = '#d63031';
+                adminBadge.style.color = 'white';
+                adminBadge.style.padding = '5px 10px';
+                adminBadge.style.borderRadius = '5px';
+                adminBadge.style.marginRight = '10px';
+
+                walletBtnContainer.insertBefore(adminBadge, walletBtnContainer.firstChild);
+            }
+        }
+
+        // Update token amount based on input
+        document.getElementById('fiat-amount').addEventListener('input', function () {
+            const amount = parseFloat(this.value) || 0;
+            document.getElementById('fiat-token-amount').textContent = amount.toFixed(2);
+
+            // Update summary
+            document.querySelector('#fiat-content .token-amount').textContent = amount.toFixed(2) + ' PTK';
+
+            const fee = amount * 0.02;
+            document.querySelector('#fiat-content .fee-amount').textContent = '$' + fee.toFixed(2);
+
+            const total = amount + fee;
+            document.querySelector('#fiat-content .total-amount').textContent = '$' + total.toFixed(2);
+        });
+
+        document.getElementById('crypto-amount').addEventListener('input', function () {
+            const amount = parseFloat(this.value) || 0;
+            document.getElementById('crypto-token-amount').textContent = amount.toFixed(2);
+
+            // Update summary
+            document.querySelector('#crypto-content .token-amount').textContent = amount.toFixed(2) + ' PTK';
+
+            const fee = amount * 0.01; // Lower fee for crypto
+            document.querySelector('#crypto-content .fee-amount').textContent = fee.toFixed(2) + ' USDT';
+
+            const total = amount + fee;
+            document.querySelector('#crypto-content .total-amount').textContent = total.toFixed(2) + ' USDT';
+        });
+
+        // Amount presets
+        document.querySelectorAll('.amount-preset').forEach(preset => {
+            preset.addEventListener('click', function () {
+                const amount = this.getAttribute('data-amount');
+                const targetId = this.getAttribute('data-target');
+                const input = document.getElementById(targetId);
+
+                input.value = amount;
+
+                // Trigger input event to update calculations
+                const event = new Event('input');
+                input.dispatchEvent(event);
+
+                // Update active state
+                const presets = this.parentElement.querySelectorAll('.amount-preset');
+                presets.forEach(p => p.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Payment method selection
+        document.querySelectorAll('.payment-method').forEach(method => {
+            method.addEventListener('click', function () {
+                const methods = this.parentElement.querySelectorAll('.payment-method');
+                methods.forEach(m => m.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Tab switching
+        document.querySelectorAll('.purchase-tab').forEach(tab => {
+            tab.addEventListener('click', function () {
+                // Update active tab
+                document.querySelectorAll('.purchase-tab').forEach(t => {
+                    t.classList.remove('active');
+                });
+                this.classList.add('active');
+
+                // Show corresponding content
+                const tabId = this.getAttribute('data-tab');
+                document.querySelectorAll('.purchase-content').forEach(content => {
+                    content.classList.add('hidden');
+                });
+                document.getElementById(tabId + '-content').classList.remove('hidden');
+            });
+        });
+
+        // Handle token purchase
+        document.querySelectorAll('.purchase-btn').forEach(button => {
+            button.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                if (!currentUser) {
+                    alert('Please log in to purchase tokens');
+                    return;
+                }
+
+                const type = this.getAttribute('data-type');
+                const form = this.closest('form');
+                const amountInput = form.querySelector('input[type="number"]');
+                const amount = parseFloat(amountInput.value);
+
+                if (!amount || amount <= 0) {
+                    alert('Please enter a valid amount');
+                    return;
+                }
+
+                // Calculate fee
+                const fee = type === 'fiat' ? amount * 0.02 : amount * 0.01;
+                const total = amount + fee;
+
+                // Create transaction record
+                const transaction = {
+                    id: Date.now().toString(),
+                    type: `Purchase (${type === 'fiat' ? 'Fiat' : 'Crypto'})`,
+                    amount: amount,
+                    date: new Date().toISOString(),
+                    status: 'Completed'
+                };
+
+                // Update user's token balance and add transaction
+                currentUser.tokenBalance += amount;
+                if (!currentUser.transactions) {
+                    currentUser.transactions = [];
+                }
+                currentUser.transactions.unshift(transaction);
+
+                // Update session storage
+                sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
+
+                // Update local storage
+                const users = JSON.parse(localStorage.getItem('polypredict_users') || '[]');
+                const userIndex = users.findIndex(u => u.id === currentUser.id);
+                if (userIndex !== -1) {
+                    users[userIndex] = currentUser;
+                    localStorage.setItem('polypredict_users', JSON.stringify(users));
+                }
+
+                // Show success message
+                alert(`Successfully purchased ${amount} tokens!`);
+
+                // Reset form
+                amountInput.value = '';
+
+                // Update UI
+                updateUserUI();
+
+                // Force update of token balance displays with animation
+                const tokenBalanceElement = document.getElementById('user-token-balance');
+
+                // Apply highlight animation
+                tokenBalanceElement.style.transition = 'all 0.5s ease';
+                tokenBalanceElement.style.backgroundColor = '#c6f6d5';
+                tokenBalanceElement.style.padding = '5px';
+                tokenBalanceElement.style.borderRadius = '5px';
+                tokenBalanceElement.textContent = `${currentUser.tokenBalance.toLocaleString()} PTK`;
+
+                // Remove highlight after a delay
+                setTimeout(() => {
+                    tokenBalanceElement.style.backgroundColor = 'transparent';
+                    tokenBalanceElement.style.padding = '0';
+                }, 1500);
+
+                // Trigger input event to update calculations
+                const event = new Event('input');
+                amountInput.dispatchEvent(event);
+            });
+        });
+    </script>
+    <script src="js/navigation.js"></script>
+    <script src="js/security.js"></script>
+</body>
+
+</html>

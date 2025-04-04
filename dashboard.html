@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' https: data:; connect-src 'self';">
+    <title>Dashboard - PolyPredict</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/enhanced-styles.css">
+    <link rel="stylesheet" href="css/market-card-fix.css">
+    <link rel="stylesheet" href="css/dashboard-fix.css">
+    <link rel="stylesheet" href="css/exact-layout-fix.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="index.html" class="logo">PolyPredict</a>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="dashboard.html" class="active">Markets</a></li>
+                    <li><a href="token.html">Tokens</a></li>
+                    <li><a href="index.html#about">About</a></li>
+                </ul>
+                <div class="wallet-btn">
+                    <a href="login.html" class="btn btn-outline">Login</a>
+                    <button class="btn btn-primary connect-wallet-btn">Connect Wallet</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Dashboard -->
+    <div class="container">
+        <div class="dashboard">
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <div class="user-info">
+                    <div class="avatar-container" style="position: relative; display: inline-block;">
+                        <img src="https://via.placeholder.com/80" alt="User Avatar" class="user-avatar"
+                            id="user-avatar">
+                        <button id="change-avatar-btn"
+                            style="position: absolute; bottom: 0; right: 0; background-color: var(--primary-color); color: white; border: none; border-radius: 50%; width: 24px; height: 24px; font-size: 12px; cursor: pointer;">
+                            <i class="fas fa-camera"></i>
+                        </button>
+                    </div>
+                    <h3>Welcome</h3>
+                    <p class="wallet-address">Connect your wallet</p>
+
+                    <!-- Avatar Change Modal -->
+                    <div id="avatar-modal"
+                        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
+                        <div
+                            style="background-color: white; padding: 20px; border-radius: 10px; width: 90%; max-width: 400px;">
+                            <h3>Change Avatar</h3>
+                            <div style="margin: 20px 0;">
+                                <p>Select an avatar style:</p>
+                                <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px;">
+                                    <button class="avatar-option" data-style="initials"
+                                        style="width: 60px; height: 60px; border-radius: 50%; border: 2px solid #ddd; cursor: pointer; background-color: #6c5ce7; color: white; font-weight: bold;">AB</button>
+                                    <button class="avatar-option" data-style="male"
+                                        style="width: 60px; height: 60px; border-radius: 50%; border: 2px solid #ddd; cursor: pointer; overflow: hidden;">
+                                        <img src="https://randomuser.me/api/portraits/men/32.jpg"
+                                            style="width: 100%; height: 100%; object-fit: cover;">
+                                    </button>
+                                    <button class="avatar-option" data-style="female"
+                                        style="width: 60px; height: 60px; border-radius: 50%; border: 2px solid #ddd; cursor: pointer; overflow: hidden;">
+                                        <img src="https://randomuser.me/api/portraits/women/44.jpg"
+                                            style="width: 100%; height: 100%; object-fit: cover;">
+                                    </button>
+                                    <button class="avatar-option" data-style="abstract"
+                                        style="width: 60px; height: 60px; border-radius: 50%; border: 2px solid #ddd; cursor: pointer; overflow: hidden;">
+                                        <img src="https://avatars.dicebear.com/api/abstract/random.svg"
+                                            style="width: 100%; height: 100%; object-fit: cover;">
+                                    </button>
+                                    <button class="avatar-option" data-style="custom"
+                                        style="width: 60px; height: 60px; border-radius: 50%; border: 2px solid #ddd; cursor: pointer; display: flex; justify-content: center; align-items: center;">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+
+                                <div id="custom-avatar-input" style="margin-top: 15px; display: none;">
+                                    <label for="avatar-url">Enter image URL:</label>
+                                    <input type="text" id="avatar-url"
+                                        style="width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ddd; border-radius: 5px;"
+                                        placeholder="https://example.com/image.jpg">
+                                </div>
+
+                                <div id="initials-avatar-input" style="margin-top: 15px; display: none;">
+                                    <label for="avatar-initials">Enter your initials (1-2 characters):</label>
+                                    <input type="text" id="avatar-initials"
+                                        style="width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ddd; border-radius: 5px;"
+                                        placeholder="AB" maxlength="2">
+                                    <div style="margin-top: 10px;">
+                                        <label>Background color:</label>
+                                        <div style="display: flex; gap: 5px; margin-top: 5px;">
+                                            <button class="color-option" data-color="6c5ce7"
+                                                style="width: 30px; height: 30px; border-radius: 50%; background-color: #6c5ce7; border: none; cursor: pointer;"></button>
+                                            <button class="color-option" data-color="00b894"
+                                                style="width: 30px; height: 30px; border-radius: 50%; background-color: #00b894; border: none; cursor: pointer;"></button>
+                                            <button class="color-option" data-color="e17055"
+                                                style="width: 30px; height: 30px; border-radius: 50%; background-color: #e17055; border: none; cursor: pointer;"></button>
+                                            <button class="color-option" data-color="0984e3"
+                                                style="width: 30px; height: 30px; border-radius: 50%; background-color: #0984e3; border: none; cursor: pointer;"></button>
+                                            <button class="color-option" data-color="6c5ce7"
+                                                style="width: 30px; height: 30px; border-radius: 50%; background-color: #6c5ce7; border: none; cursor: pointer;"></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                                <button id="cancel-avatar-btn"
+                                    style="padding: 8px 16px; border: none; border-radius: 5px; cursor: pointer;">Cancel</button>
+                                <button id="save-avatar-btn"
+                                    style="padding: 8px 16px; background-color: var(--primary-color); color: white; border: none; border-radius: 5px; cursor: pointer;">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="token-balance"
+                    style="background-color: #f0fff4; border-radius: 8px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                    <p style="font-weight: 500; color: #2f855a;">Token Balance</p>
+                    <h3 style="font-size: 2rem; color: #2f855a;">1,000 PTK</h3>
+                    <a href="token.html" class="btn btn-primary"
+                        style="background-color: #38a169; border: none; width: 100%; margin-top: 10px; font-weight: 500; box-shadow: 0 4px 6px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; gap: 5px;">
+                        <i class="fas fa-coins"></i> Buy Tokens
+                    </a>
+                </div>
+
+                <ul class="sidebar-menu">
+                    <li><a href="dashboard.html" class="active"><i class="fas fa-chart-line"></i> Markets</a></li>
+                    <li><a href="#"><i class="fas fa-history"></i> My Bets</a></li>
+                    <li><a href="#"><i class="fas fa-wallet"></i> Wallet</a></li>
+                    <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+                </ul>
+            </div>
+
+            <!-- Main Content -->
+            <div class="main-content">
+                <h2>Prediction Markets</h2>
+
+                <div class="bet-info">
+                    <strong>Betting Rules:</strong>
+                    <ul style="margin-top: 5px; margin-bottom: 5px;">
+                        <li>Each bet costs exactly 1 token</li>
+                        <li>Winning bets pay out 1.80 tokens (0.20 goes to the platform)</li>
+                        <li>Bets only become active when there's at least one opposing bet</li>
+                        <li>You can only place one bet per market</li>
+                    </ul>
+                </div>
+
+                <!-- Tabs -->
+                <div class="tabs" style="border-bottom: 2px solid #eee; margin-bottom: 30px;">
+                    <div class="tab active" data-tab="running"
+                        style="padding: 12px 20px; font-weight: 500; cursor: pointer; position: relative;">
+                        <i class="fas fa-play-circle" style="margin-right: 5px;"></i> Running Bets
+                        <span
+                            style="position: absolute; bottom: -2px; left: 0; width: 100%; height: 2px; background-color: var(--primary-color);"></span>
+                    </div>
+                    <div class="tab" data-tab="completed"
+                        style="padding: 12px 20px; font-weight: 500; cursor: pointer; position: relative;">
+                        <i class="fas fa-check-circle" style="margin-right: 5px;"></i> Completed Bets
+                    </div>
+                    <div class="tab" data-tab="trending"
+                        style="padding: 12px 20px; font-weight: 500; cursor: pointer; position: relative;">
+                        <i class="fas fa-fire" style="margin-right: 5px;"></i> Trending
+                    </div>
+                    <div class="tab" data-tab="upcoming"
+                        style="padding: 12px 20px; font-weight: 500; cursor: pointer; position: relative;">
+                        <i class="fas fa-calendar" style="margin-right: 5px;"></i> Upcoming
+                    </div>
+                </div>
+
+                <!-- Running Bets Tab Content -->
+                <div id="running-content" class="tab-content">
+                    <div
+                        style="margin-bottom: 20px; background-color: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 4px solid var(--success-color);">
+                        <h3 style="margin-top: 0; color: var(--success-color);"><i class="fas fa-info-circle"></i>
+                            Running Bets</h3>
+                        <p style="margin-bottom: 0;">These markets are currently active and accepting bets. Place
+                            your
+                            predictions before they close!</p>
+                    </div>
+                    <div class="markets-grid">
+                        <!-- Market Card 1 -->
+                        <div class="market-card running">
+                            <div class="market-header">
+                                <h3 class="market-title">US Presidential Election 2024</h3>
+                                <div class="market-meta">
+                                    <span>Politics</span>
+                                    <span>Ends: Nov 5, 2024</span>
+                                </div>
+                            </div>
+                            <div class="market-body">
+                                <p class="market-description">Who will win the 2024 US Presidential Election?</p>
+                                <div class="outcomes">
+                                    <div class="outcome">
+                                        <span class="outcome-name">Republican</span>
+                                        <span class="outcome-odds">1.8x</span>
+                                        <button class="btn btn-sm bet-btn-sm" data-market="1" data-outcome="Republican"
+                                            data-odds="1.8">Bet</button>
+                                    </div>
+                                    <div class="outcome">
+                                        <span class="outcome-name">Democrat</span>
+                                        <span class="outcome-odds">2.1x</span>
+                                        <button class="btn btn-sm bet-btn-sm" data-market="1" data-outcome="Democrat"
+                                            data-odds="2.1">Bet</button>
+                                    </div>
+                                    <div class="outcome">
+                                        <span class="outcome-name">Other</span>
+                                        <span class="outcome-odds">15.0x</span>
+                                        <button class="btn btn-sm bet-btn-sm" data-market="1" data-outcome="Other"
+                                            data-odds="15.0">Bet</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="market-footer">
+                                <span class="market-status status-open">Open</span>
+                                <button class="btn btn-primary bet-btn" data-market="1" data-outcome="Republican"
+                                    data-odds="1.8">Place Bet</button>
+                            </div>
+                        </div>
+
+                        <!-- Market Card 2 -->
+                        <div class="market-body">
+                            <p class="market-description">What will be the price of Bitcoin at the end of 2025?
+                            </p>
+                            <div class="outcomes">
+                                <div class="outcome">
+                                    <span class="outcome-name">Under $50,000</span>
+                                    <span class="outcome-odds">3.0x</span>
+                                </div>
+                                <div class="outcome">
+                                    <span class="outcome-name">$50,000 - $100,000</span>
+                                    <span class="outcome-odds">2.0x</span>
+                                </div>
+                                <div class="outcome">
+                                    <span class="outcome-name">Over $100,000</span>
+                                    <span class="outcome-odds">4.0x</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="market-card running">
+                            <div class="market-header">
+                                <h3 class="market-title">Bitcoin Price End of 2025</h3>
+                                <div class="market-meta">
+                                    <span>Crypto</span>
+                                    <span>Ends: Dec 31, 2024</span>
+                                </div>
+                            </div>
+
+                            <div class="market-footer">
+                                <span class="market-status status-open">Open</span>
+                                <button class="btn btn-primary bet-btn" data-market="2"
+                                    data-outcome="$50,000 - $100,000" data-odds="2.0">Place Bet</button>
+                            </div>
+                        </div>
+                        <!-- Market Card 2 -->
+                        <div class="market-body">
+                            <p class="market-description">What will be the price of Ethereum at the end of 2025?
+                            </p>
+                            <div class="outcomes">
+                                <div class="outcome">
+                                    <span class="outcome-name">Under $5000</span>
+                                    <span class="outcome-odds">3.0x</span>
+                                </div>
+                                <div class="outcome">
+                                    <span class="outcome-name">$5000 - $10,000</span>
+                                    <span class="outcome-odds">2.0x</span>
+                                </div>
+                                <div class="outcome">
+                                    <span class="outcome-name">Over $10,000</span>
+                                    <span class="outcome-odds">4.0x</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="market-card running">
+                            <div class="market-header">
+                                <h3 class="market-title">Bitcoin Price End of 2025</h3>
+                                <div class="market-meta">
+                                    <span>Crypto</span>
+                                    <span>Ends: Dec 31, 2025</span>
+                                </div>
+                            </div>
+
+                            <div class="market-footer">
+                                <span class="market-status status-open">Open</span>
+                                <button class="btn btn-primary bet-btn" data-market="2"
+                                    data-outcome="$50,000 - $100,000" data-odds="2.0">Place Bet</button>
+                            </div>
+                        </div>
+
+                        <!-- Market Card 2 -->
+                        <div class="market-body">
+                            <p class="market-description">What will be the price of Solana at the end of 2025?
+                            </p>
+                            <div class="outcomes">
+                                <div class="outcome">
+                                    <span class="outcome-name">Under $500</span>
+                                    <span class="outcome-odds">3.0x</span>
+                                </div>
+                                <div class="outcome">
+                                    <span class="outcome-name">$500 - $1000</span>
+                                    <span class="outcome-odds">2.0x</span>
+                                </div>
+                                <div class="outcome">
+                                    <span class="outcome-name">Over $1000</span>
+                                    <span class="outcome-odds">4.0x</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="market-card running">
+                            <div class="market-header">
+                                <h3 class="market-title">Solana Price End of 2025</h3>
+                                <div class="market-meta">
+                                    <span>Crypto</span>
+                                    <span>Ends: Dec 31, 2025</span>
+                                </div>
+                            </div>
+
+                            <div class="market-footer">
+                                <span class="market-status status-open">Open</span>
+                                <button class="btn btn-primary bet-btn" data-market="2" data-outcome="$50,0 - $1000"
+                                    data-odds="2.0">Place Bet</button>
+                            </div>
+                        </div>
+                        <!-- Market Card 3 -->
+                        <div class="market-card running">
+                            <div class="market-header">
+                                <h3 class="market-title">Super Bowl Winner 2025</h3>
+                                <div class="market-meta">
+                                    <span>Sports</span>
+                                    <span>Ends: Feb 9, 2025</span>
+                                </div>
+                            </div>
+                            <div class="market-body">
+                                <p class="market-description">Which team will win the Super Bowl in 2025?</p>
+                                <div class="outcomes">
+                                    <div class="outcome">
+                                        <span class="outcome-name">Kansas City Chiefs</span>
+                                        <span class="outcome-odds">5.0x</span>
+                                    </div>
+                                    <div class="outcome">
+                                        <span class="outcome-name">San Francisco 49ers</span>
+                                        <span class="outcome-odds">6.0x</span>
+                                    </div>
+                                    <div class="outcome">
+                                        <span class="outcome-name">Dallas Cowboys</span>
+                                        <span class="outcome-odds">8.0x</span>
+                                    </div>
+                                    <div class="outcome">
+                                        <span class="outcome-name">Other</span>
+                                        <span class="outcome-odds">2.5x</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="market-footer">
+                                <span class="market-status status-open">Open</span>
+                                <button class="btn btn-primary bet-btn" data-market="3"
+                                    data-outcome="Kansas City Chiefs" data-odds="5.0">Place Bet</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Completed Bets Tab Content -->
+                <div id="completed-content" class="tab-content" style="display: none;">
+                    <div
+                        style="margin-bottom: 20px; background-color: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 4px solid var(--info-color);">
+                        <h3 style="margin-top: 0; color: var(--info-color);"><i class="fas fa-trophy"></i> Completed
+                            Bets</h3>
+                        <p style="margin-bottom: 0;">These markets have been resolved. Check if your predictions
+                            were
+                            correct!</p>
+                    </div>
+                    <div class="markets-grid">
+                        <!-- Completed Market Card 1 -->
+                        <div class="market-card completed">
+                            <div class="market-header">
+                                <h3 class="market-title">Oscars Best Picture 2024</h3>
+                                <div class="market-meta">
+                                    <span>Entertainment</span>
+                                    <span>Ended: Mar 10, 2024</span>
+                                </div>
+                            </div>
+                            <div class="market-body">
+                                <p class="market-description">Which film will win the Academy Award for Best
+                                    Picture?
+                                </p>
+                                <div class="outcomes">
+                                    <div class="outcome" style="background-color: rgba(9, 132, 227, 0.1);">
+                                        <span class="outcome-name"><strong>Oppenheimer</strong> (Winner)</span>
+                                        <span class="outcome-odds">1.5x</span>
+                                    </div>
+                                    <div class="outcome">
+                                        <span class="outcome-name">Barbie</span>
+                                        <span class="outcome-odds">3.0x</span>
+                                    </div>
+                                    <div class="outcome">
+                                        <span class="outcome-name">Killers of the Flower Moon</span>
+                                        <span class="outcome-odds">4.0x</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="market-footer">
+                                <span class="market-status status-resolved">Resolved</span>
+                                <a href="#" class="btn btn-outline">View Details</a>
+                            </div>
+                        </div>
+
+                        <!-- Completed Market Card 2 -->
+                        <div class="market-card completed">
+                            <div class="market-header">
+                                <h3 class="market-title">Super Bowl 2024</h3>
+                                <div class="market-meta">
+                                    <span>Sports</span>
+                                    <span>Ended: Feb 11, 2024</span>
+                                </div>
+                            </div>
+                            <div class="market-body">
+                                <p class="market-description">Which team will win Super Bowl LVIII?</p>
+                                <div class="outcomes">
+                                    <div class="outcome" style="background-color: rgba(9, 132, 227, 0.1);">
+                                        <span class="outcome-name"><strong>Kansas City Chiefs</strong>
+                                            (Winner)</span>
+                                        <span class="outcome-odds">2.2x</span>
+                                    </div>
+                                    <div class="outcome">
+                                        <span class="outcome-name">San Francisco 49ers</span>
+                                        <span class="outcome-odds">1.8x</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="market-footer">
+                                <span class="market-status status-resolved">Resolved</span>
+                                <a href="#" class="btn btn-outline">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Trending Bets Tab Content -->
+                <div id="trending-content" class="tab-content" style="display: none;">
+                    <div
+                        style="margin-bottom: 20px; background-color: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 4px solid var(--accent-color);">
+                        <h3 style="margin-top: 0; color: var(--accent-color);"><i class="fas fa-fire"></i> Trending
+                            Markets</h3>
+                        <p style="margin-bottom: 0;">These are the hottest markets with the most activity. Join the
+                            action!</p>
+                    </div>
+                    <div class="markets-grid">
+                        <!-- Trending Market Card 1 -->
+                        <div class="market-card trending">
+                            <div class="market-header">
+                                <h3 class="market-title">Ethereum Price After ETH 2.0</h3>
+                                <div class="market-meta">
+                                    <span>Crypto</span>
+                                    <span>Ends: Dec 31, 2024</span>
+                                </div>
+                            </div>
+                            <div class="market-body">
+                                <p class="market-description">What will be the price of Ethereum after the full ETH
+                                    2.0
+                                    implementation?</p>
+                                <div class="outcomes">
+                                    <div class="outcome">
+                                        <span class="outcome-name">Under $3,000</span>
+                                        <span class="outcome-odds">4.0x</span>
+                                    </div>
+                                    <div class="outcome">
+                                        <span class="outcome-name">$3,000 - $5,000</span>
+                                        <span class="outcome-odds">2.5x</span>
+                                    </div>
+                                    <div class="outcome">
+                                        <span class="outcome-name">$5,000 - $10,000</span>
+                                        <span class="outcome-odds">3.0x</span>
+                                    </div>
+                                    <div class="outcome">
+                                        <span class="outcome-name">Over $10,000</span>
+                                        <span class="outcome-odds">5.0x</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="market-footer">
+                                <span class="market-status status-open">Open</span>
+                                <a href="#" class="btn btn-primary">Place Bet</a>
+                            </div>
+                        </div>
+
+                        <!-- Trending Market Card 2 -->
+                        <div class="market-card">
+                            <div class="market-header">
+                                <h3 class="market-title">Next Fed Interest Rate Decision</h3>
+                                <div class="market-meta">
+                                    <span>Economics</span>
+                                    <span>Ends: Jun 15, 2024</span>
+                                </div>
+                            </div>
+                            <div class="market-body">
+                                <p class="market-description">What will be the Federal Reserve's next interest rate
+                                    decision?</p>
+                                <div class="outcomes">
+                                    <div class="outcome">
+                                        <span class="outcome-name">Rate Cut</span>
+                                        <span class="outcome-odds">2.0x</span>
+                                    </div>
+                                    <div class="outcome">
+                                        <span class="outcome-name">No Change</span>
+                                        <span class="outcome-odds">1.5x</span>
+                                    </div>
+                                    <div class="outcome">
+                                        <span class="outcome-name">Rate Increase</span>
+                                        <span class="outcome-odds">8.0x</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="market-footer">
+                                <span class="market-status status-open">Open</span>
+                                <a href="#" class="btn btn-primary">Place Bet</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Upcoming Bets Tab Content -->
+                <div id="upcoming-content" class="tab-content" style="display: none;">
+                    <div
+                        style="margin-bottom: 20px; background-color: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 4px solid var(--warning-color);">
+                        <h3 style="margin-top: 0; color: var(--warning-color);"><i class="fas fa-calendar"></i>
+                            Upcoming
+                            Markets</h3>
+                        <p style="margin-bottom: 0;">These markets will open soon. Set a reminder to be notified
+                            when
+                            betting begins!</p>
+                    </div>
+                    <div class="markets-grid">
+                        <!-- Upcoming Market Card 1 -->
+                        <div class="market-card">
+                            <div class="market-header">
+                                <h3 class="market-title">2024 Summer Olympics Medal Count</h3>
+                                <div class="market-meta">
+                                    <span>Sports</span>
+                                    <span>Opens: Jul 1, 2024</span>
+                                </div>
+                            </div>
+                            <div class="market-body">
+                                <p class="market-description">Which country will win the most gold medals at the
+                                    2024
+                                    Summer Olympics?</p>
+                                <div class="outcomes">
+                                    <div class="outcome">
+                                        <span class="outcome-name">United States</span>
+                                        <span class="outcome-odds">1.8x</span>
+                                    </div>
+                                    <div class="outcome">
+                                        <span class="outcome-name">China</span>
+                                        <span class="outcome-odds">2.2x</span>
+                                    </div>
+                                    <div class="outcome">
+                                        <span class="outcome-name">Japan</span>
+                                        <span class="outcome-odds">6.0x</span>
+                                    </div>
+                                    <div class="outcome">
+                                        <span class="outcome-name">Other</span>
+                                        <span class="outcome-odds">4.0x</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="market-footer">
+                                <span class="market-status status-closed">Coming Soon</span>
+                                <a href="#" class="btn btn-outline">Notify Me</a>
+                            </div>
+                        </div>
+
+                        <!-- Upcoming Market Card 2 -->
+                        <div class="market-card">
+                            <div class="market-header">
+                                <h3 class="market-title">Next iPhone Release Date</h3>
+                                <div class="market-meta">
+                                    <span>Technology</span>
+                                    <span>Opens: Jun 1, 2024</span>
+                                </div>
+                            </div>
+                            <div class="market-body">
+                                <p class="market-description">When will Apple release the next iPhone model?</p>
+                                <div class="outcomes">
+                                    <div class="outcome">
+                                        <span class="outcome-name">September 2024</span>
+                                        <span class="outcome-odds">1.5x</span>
+                                    </div>
+                                    <div class="outcome">
+                                        <span class="outcome-name">October 2024</span>
+                                        <span class="outcome-odds">3.0x</span>
+                                    </div>
+                                    <div class="outcome">
+                                        <span class="outcome-name">November 2024 or later</span>
+                                        <span class="outcome-odds">5.0x</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="market-footer">
+                                <span class="market-status status-closed">Coming Soon</span>
+                                <a href="#" class="btn btn-outline">Notify Me</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-links">
+                    <h4>PolyPredict</h4>
+                    <p>A decentralized prediction market platform built on Ethereum blockchain.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="dashboard.html">Markets</a></li>
+                        <li><a href="token.html">Tokens</a></li>
+                        <li><a href="index.html#about">About</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Connect With Us</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-discord"></i></a>
+                        <a href="#"><i class="fab fa-telegram"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 PolyPredict. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/betting.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="js/admin-tools.js"></script>
+    <script src="js/security.js"></script>
+    <script src="js/exact-market-layout.js"></script>
+    <script src="js/dashboard-admin-controls.js"></script>
+    <script src="js/fix-admin.js"></script>
+    <script src="js/fix-betting.js"></script>
+    <script>
+        // Tab functionality
+        document.addEventListener('DOMContentLoaded', function () {
+            const tabs = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function () {
+                    // Remove active class and indicator from all tabs
+                    tabs.forEach(t => {
+                        t.classList.remove('active');
+                        // Remove any existing indicator spans
+                        const indicator = t.querySelector('span');
+                        if (indicator) {
+                            indicator.style.display = 'none';
+                        }
+                    });
+
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+
+                    // Show indicator for active tab
+                    const indicator = this.querySelector('span');
+                    if (indicator) {
+                        indicator.style.display = 'block';
+                    } else {
+                        // Create indicator if it doesn't exist
+                        const newIndicator = document.createElement('span');
+                        newIndicator.style.position = 'absolute';
+                        newIndicator.style.bottom = '-2px';
+                        newIndicator.style.left = '0';
+                        newIndicator.style.width = '100%';
+                        newIndicator.style.height = '2px';
+                        newIndicator.style.backgroundColor = 'var(--primary-color)';
+                        this.appendChild(newIndicator);
+                    }
+
+                    // Hide all tab contents
+                    tabContents.forEach(content => {
+                        content.style.display = 'none';
+                    });
+
+                    // Show selected tab content
+                    const tabId = this.getAttribute('data-tab');
+                    const selectedContent = document.getElementById(tabId + '-content');
+                    if (selectedContent) {
+                        selectedContent.style.display = 'block';
+                    }
+                });
+            });
+        });
+    </script>
+    <script>
+        // Check if user is logged in
+        const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+
+        // Update UI with user data
+        function updateUserUI() {
+            if (currentUser) {
+                // Create a protected version of user data for display
+                // This ensures sensitive data isn't leaked to the UI
+                let displayUser;
+
+                // Check if we have the security.js functions available
+                if (typeof protectUserData === 'function') {
+                    // Use our data protection function
+                    displayUser = protectUserData(currentUser, false);
+                    // Log safely
+                    safeLog(displayUser, 'User data for UI display:');
+                } else {
+                    // Fallback if security.js isn't loaded
+                    displayUser = JSON.parse(JSON.stringify(currentUser));
+                    // Remove sensitive data
+                    delete displayUser.password;
+                }
+
+                // Update user info in sidebar
+                const userInfoSection = document.querySelector('.user-info');
+                if (userInfoSection) {
+                    // Update avatar
+                    const userAvatar = document.getElementById('user-avatar');
+                    if (userAvatar && currentUser.avatar) {
+                        userAvatar.src = currentUser.avatar;
+                    }
+
+                    userInfoSection.querySelector('h3').textContent = 'Welcome';
+
+                    // Check if email display already exists
+                    if (!document.querySelector('.user-email-display')) {
+                        const emailDisplay = document.createElement('p');
+                        emailDisplay.className = 'user-email-display';
+                        // Use protected email
+                        emailDisplay.textContent = displayUser.email || currentUser.email.split('@')[0].charAt(0) + '***@' + currentUser.email.split('@')[1];
+                        emailDisplay.style.fontSize = '0.9rem';
+                        emailDisplay.style.marginBottom = '10px';
+
+                        // Insert email after the h3
+                        userInfoSection.insertBefore(emailDisplay, userInfoSection.querySelector('.wallet-address'));
+                    }
+
+                    // Update wallet address if available - mask it for privacy
+                    if (currentUser.walletAddress) {
+                        const walletAddress = displayUser.walletAddress ||
+                            (currentUser.walletAddress.substring(0, 6) + '...' +
+                                currentUser.walletAddress.substring(currentUser.walletAddress.length - 4));
+                        userInfoSection.querySelector('.wallet-address').textContent = walletAddress;
+                    } else {
+                        userInfoSection.querySelector('.wallet-address').textContent = 'No wallet connected';
+                    }
+                }
+
+                // Update token balance
+                const tokenBalanceSection = document.querySelector('.token-balance');
+                if (tokenBalanceSection) {
+                    tokenBalanceSection.querySelector('h3').textContent = `${currentUser.tokenBalance} PTK`;
+                }
+
+                // Hide login button if user is logged in
+                const loginBtn = document.querySelector('a[href="login.html"]');
+                if (loginBtn) {
+                    loginBtn.style.display = 'none';
+                }
+
+                // Add logout button
+                const walletBtnContainer = document.querySelector('.wallet-btn');
+                if (walletBtnContainer) {
+                    // Check if logout button already exists
+                    if (!document.querySelector('#logout-btn')) {
+                        const logoutBtn = document.createElement('button');
+                        logoutBtn.id = 'logout-btn';
+                        logoutBtn.className = 'btn btn-outline';
+                        logoutBtn.textContent = 'Logout';
+                        logoutBtn.style.marginRight = '10px';
+                        logoutBtn.addEventListener('click', function () {
+                            // Clear user session
+                            sessionStorage.removeItem('currentUser');
+                            // Redirect to home page
+                            window.location.href = 'index.html';
+                        });
+
+                        walletBtnContainer.insertBefore(logoutBtn, walletBtnContainer.firstChild);
+                    }
+                }
+
+                // Setup avatar change functionality
+                setupAvatarChange();
+            } else {
+                // User is not logged in, but can still view markets
+                // Hide user-specific elements
+                const userInfoSection = document.querySelector('.user-info');
+                if (userInfoSection) {
+                    userInfoSection.innerHTML = `
+                        <div style="text-align: center; padding: 20px;">
+                            <img src="https://ui-avatars.com/api/?name=Guest&background=6c5ce7&color=fff&size=128" alt="Guest" class="user-avatar">
+                            <h3>Welcome, Guest</h3>
+                            <p>Sign in to place bets and track your winnings</p>
+                            <a href="login.html" class="btn btn-primary" style="margin-top: 10px;">Sign In</a>
+                        </div>
+                    `;
+                }
+
+                // Update token balance section
+                const tokenBalanceSection = document.querySelector('.token-balance');
+                if (tokenBalanceSection) {
+                    tokenBalanceSection.innerHTML = `
+                        <div style="background-color: #f0fff4; border-radius: 8px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                            <p style="font-weight: 500; color: #2f855a;">Token Balance</p>
+                            <h3 style="font-size: 2rem; color: #2f855a;">0 PTK</h3>
+                            <a href="login.html" class="btn btn-primary" style="background-color: #38a169; border: none; width: 100%; margin-top: 10px; font-weight: 500; box-shadow: 0 4px 6px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; gap: 5px; animation: pulse 2s infinite;">
+                                <i class="fas fa-sign-in-alt"></i> Sign In to Buy Tokens
+                            </a>
+                        </div>
+                    `;
+
+                    // Add pulse animation
+                    const style = document.createElement('style');
+                    style.textContent = `
+                        @keyframes pulse {
+                            0% { transform: scale(1); }
+                            50% { transform: scale(1.05); }
+                            100% { transform: scale(1); }
+                        }
+                    `;
+                    document.head.appendChild(style);
+                }
+
+                // Update sidebar menu
+                const sidebarMenu = document.querySelector('.sidebar-menu');
+                if (sidebarMenu) {
+                    sidebarMenu.innerHTML = `
+                        <li><a href="dashboard.html" class="active"><i class="fas fa-chart-line"></i> Markets</a></li>
+                        <li><a href="login.html"><i class="fas fa-sign-in-alt"></i> Sign In</a></li>
+                    `;
+                }
+
+                // Disable bet buttons for non-logged in users
+                document.querySelectorAll('.market-footer .btn-primary').forEach(btn => {
+                    btn.addEventListener('click', function (e) {
+                        e.preventDefault();
+                        alert('Please sign in to place bets');
+                        window.location.href = 'login.html';
+                    });
+                });
+
+                // Show login button in header
+                const loginBtn = document.querySelector('a[href="login.html"]');
+                if (loginBtn) {
+                    loginBtn.style.display = 'inline-block';
+                }
+            }
+        }
+
+        // Setup avatar change functionality
+        function setupAvatarChange() {
+            const changeAvatarBtn = document.getElementById('change-avatar-btn');
+            const avatarModal = document.getElementById('avatar-modal');
+            const cancelAvatarBtn = document.getElementById('cancel-avatar-btn');
+            const saveAvatarBtn = document.getElementById('save-avatar-btn');
+            const avatarOptions = document.querySelectorAll('.avatar-option');
+            const customAvatarInput = document.getElementById('custom-avatar-input');
+            const initialsAvatarInput = document.getElementById('initials-avatar-input');
+            const colorOptions = document.querySelectorAll('.color-option');
+
+            let selectedAvatarStyle = '';
+            let selectedColor = '6c5ce7';
+
+            // Show modal when change button is clicked
+            changeAvatarBtn.addEventListener('click', function () {
+                avatarModal.style.display = 'flex';
+            });
+
+            // Hide modal when cancel button is clicked
+            cancelAvatarBtn.addEventListener('click', function () {
+                avatarModal.style.display = 'none';
+                resetAvatarInputs();
+            });
+
+            // Handle avatar option selection
+            avatarOptions.forEach(option => {
+                option.addEventListener('click', function () {
+                    // Remove active class from all options
+                    avatarOptions.forEach(opt => {
+                        opt.style.borderColor = '#ddd';
+                    });
+
+                    // Add active class to selected option
+                    this.style.borderColor = 'var(--primary-color)';
+
+                    // Get selected style
+                    selectedAvatarStyle = this.getAttribute('data-style');
+
+                    // Show/hide appropriate inputs
+                    if (selectedAvatarStyle === 'custom') {
+                        customAvatarInput.style.display = 'block';
+                        initialsAvatarInput.style.display = 'none';
+                    } else if (selectedAvatarStyle === 'initials') {
+                        customAvatarInput.style.display = 'none';
+                        initialsAvatarInput.style.display = 'block';
+                    } else {
+                        customAvatarInput.style.display = 'none';
+                        initialsAvatarInput.style.display = 'none';
+                    }
+                });
+            });
+
+            // Handle color option selection
+            colorOptions.forEach(option => {
+                option.addEventListener('click', function () {
+                    // Remove active class from all options
+                    colorOptions.forEach(opt => {
+                        opt.style.border = 'none';
+                    });
+
+                    // Add active class to selected option
+                    this.style.border = '2px solid #333';
+
+                    // Get selected color
+                    selectedColor = this.getAttribute('data-color');
+                });
+            });
+
+            // Save avatar changes
+            saveAvatarBtn.addEventListener('click', function () {
+                let newAvatarUrl = '';
+
+                if (selectedAvatarStyle === 'custom') {
+                    // Get custom URL
+                    const avatarUrl = document.getElementById('avatar-url').value;
+                    if (!avatarUrl) {
+                        alert('Please enter a valid image URL');
+                        return;
+                    }
+                    newAvatarUrl = avatarUrl;
+                } else if (selectedAvatarStyle === 'initials') {
+                    // Get initials
+                    const initials = document.getElementById('avatar-initials').value;
+                    if (!initials) {
+                        alert('Please enter your initials');
+                        return;
+                    }
+                    newAvatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(initials)}&background=${selectedColor}&color=fff&size=128`;
+                } else if (selectedAvatarStyle === 'male') {
+                    // Random male avatar
+                    const randomNum = Math.floor(Math.random() * 99) + 1;
+                    newAvatarUrl = `https://randomuser.me/api/portraits/men/${randomNum}.jpg`;
+                } else if (selectedAvatarStyle === 'female') {
+                    // Random female avatar
+                    const randomNum = Math.floor(Math.random() * 99) + 1;
+                    newAvatarUrl = `https://randomuser.me/api/portraits/women/${randomNum}.jpg`;
+                } else if (selectedAvatarStyle === 'abstract') {
+                    // Random abstract avatar
+                    const randomSeed = Math.random().toString(36).substring(2, 8);
+                    newAvatarUrl = `https://avatars.dicebear.com/api/abstract/${randomSeed}.svg`;
+                } else {
+                    alert('Please select an avatar style');
+                    return;
+                }
+
+                // Update user avatar
+                currentUser.avatar = newAvatarUrl;
+
+                // Update session storage
+                sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
+
+                // Update local storage
+                const users = JSON.parse(localStorage.getItem('polypredict_users') || '[]');
+                const userIndex = users.findIndex(u => u.id === currentUser.id);
+                if (userIndex !== -1) {
+                    users[userIndex].avatar = newAvatarUrl;
+                    localStorage.setItem('polypredict_users', JSON.stringify(users));
+                }
+
+                // Update UI
+                document.getElementById('user-avatar').src = newAvatarUrl;
+
+                // Hide modal
+                avatarModal.style.display = 'none';
+
+                // Reset inputs
+                resetAvatarInputs();
+            });
+
+            // Reset avatar inputs
+            function resetAvatarInputs() {
+                // Clear selected style
+                selectedAvatarStyle = '';
+
+                // Reset borders
+                avatarOptions.forEach(opt => {
+                    opt.style.borderColor = '#ddd';
+                });
+
+                colorOptions.forEach(opt => {
+                    opt.style.border = 'none';
+                });
+
+                // Hide inputs
+                customAvatarInput.style.display = 'none';
+                initialsAvatarInput.style.display = 'none';
+
+                // Clear input values
+                document.getElementById('avatar-url').value = '';
+                document.getElementById('avatar-initials').value = '';
+            }
+        }
+
+        // Call the function to update UI
+        updateUserUI();
+
+        // Add admin link if user is admin
+        if (currentUser && currentUser.isAdmin) {
+            // Add admin link to sidebar menu
+            const sidebarMenu = document.querySelector('.sidebar-menu');
+            if (sidebarMenu) {
+                const adminLi = document.createElement('li');
+                const adminLink = document.createElement('a');
+                adminLink.href = 'admin.html';
+                adminLink.innerHTML = '<i class="fas fa-user-shield"></i> Admin Panel';
+                adminLi.appendChild(adminLink);
+                sidebarMenu.appendChild(adminLi);
+            }
+
+            // Add admin badge next to user name
+            const userInfo = document.querySelector('.user-info');
+            if (userInfo && !document.querySelector('#admin-badge')) {
+                const adminBadge = document.createElement('span');
+                adminBadge.id = 'admin-badge';
+                adminBadge.textContent = 'Admin';
+                adminBadge.style.backgroundColor = '#d63031';
+                adminBadge.style.color = 'white';
+                adminBadge.style.padding = '2px 8px';
+                adminBadge.style.borderRadius = '10px';
+                adminBadge.style.fontSize = '0.8rem';
+                adminBadge.style.marginLeft = '10px';
+
+                // Insert after h3
+                userInfo.querySelector('h3').appendChild(adminBadge);
+            }
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Settings - PolyPredict</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/enhanced-styles.css">
+    <style>
+        .settings-container {
+            max-width: 800px;
+            margin: 40px auto;
+        }
+
+        .settings-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .settings-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .settings-icon {
+            width: 40px;
+            height: 40px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 1.2rem;
+        }
+
+        .settings-title {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        .form-row {
+            margin-bottom: 20px;
+        }
+
+        .form-row label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-row input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .form-row input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(108, 92, 231, 0.2);
+        }
+
+        .password-strength {
+            margin-top: 8px;
+            font-size: 0.9rem;
+        }
+
+        .strength-weak {
+            color: var(--danger-color);
+        }
+
+        .strength-medium {
+            color: var(--warning-color);
+        }
+
+        .strength-strong {
+            color: var(--success-color);
+        }
+
+        .password-requirements {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: var(--light-text);
+        }
+
+        .requirement {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .requirement i {
+            margin-right: 5px;
+            font-size: 0.8rem;
+        }
+
+        .requirement.met i {
+            color: var(--success-color);
+        }
+
+        .requirement.not-met i {
+            color: var(--light-text);
+        }
+
+        .save-btn {
+            background-color: var(--success-color);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .save-btn:hover {
+            background-color: #00a382;
+        }
+
+        .save-btn:disabled {
+            background-color: var(--border-color);
+            cursor: not-allowed;
+        }
+
+        .settings-nav {
+            display: flex;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .settings-nav-item {
+            padding: 15px 20px;
+            cursor: pointer;
+            font-weight: 500;
+            position: relative;
+        }
+
+        .settings-nav-item.active {
+            color: var(--primary-color);
+        }
+
+        .settings-nav-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--primary-color);
+        }
+
+        .settings-section {
+            display: none;
+        }
+
+        .settings-section.active {
+            display: block;
+        }
+
+        .message-container {
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .message-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="index.html" class="logo">PolyPredict</a>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="dashboard.html">Markets</a></li>
+                    <li><a href="token.html">Tokens</a></li>
+                    <li><a href="index.html#about">About</a></li>
+                </ul>
+                <div class="wallet-btn">
+                    <button id="logout-btn" class="btn btn-outline">Logout</button>
+                    <button class="btn btn-primary connect-wallet-btn">Connect Wallet</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Settings Container -->
+    <div class="container settings-container">
+        <h2>Account Settings</h2>
+
+        <!-- Settings Navigation -->
+        <div class="settings-nav">
+            <div class="settings-nav-item active" data-section="password">Password</div>
+            <div class="settings-nav-item" data-section="profile">Profile</div>
+            <div class="settings-nav-item" data-section="notifications">Notifications</div>
+        </div>
+
+        <!-- Message Container -->
+        <div id="message-container" class="message-container"></div>
+
+        <!-- Password Settings Section -->
+        <div id="password-section" class="settings-section active">
+            <div class="settings-card">
+                <div class="settings-header">
+                    <div class="settings-icon">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <h3 class="settings-title">Change Password</h3>
+                </div>
+
+                <form id="password-form">
+                    <div class="form-row">
+                        <label for="current-password">Current Password</label>
+                        <input type="password" id="current-password" required>
+                    </div>
+
+                    <div class="form-row">
+                        <label for="new-password">New Password</label>
+                        <input type="password" id="new-password" required>
+                        <div id="password-strength" class="password-strength"></div>
+                        <div class="password-requirements">
+                            <div class="requirement" id="req-length">
+                                <i class="fas fa-circle"></i> At least 8 characters
+                            </div>
+                            <div class="requirement" id="req-uppercase">
+                                <i class="fas fa-circle"></i> At least one uppercase letter
+                            </div>
+                            <div class="requirement" id="req-lowercase">
+                                <i class="fas fa-circle"></i> At least one lowercase letter
+                            </div>
+                            <div class="requirement" id="req-number">
+                                <i class="fas fa-circle"></i> At least one number
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <label for="confirm-password">Confirm New Password</label>
+                        <input type="password" id="confirm-password" required>
+                    </div>
+
+                    <button type="submit" id="save-password-btn" class="save-btn" disabled>Save Changes</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Profile Settings Section -->
+        <div id="profile-section" class="settings-section">
+            <div class="settings-card">
+                <div class="settings-header">
+                    <div class="settings-icon">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <h3 class="settings-title">Profile Information</h3>
+                </div>
+
+                <form id="profile-form">
+                    <div class="form-row">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" disabled>
+                    </div>
+
+                    <div class="form-row">
+                        <label for="location">Location</label>
+                        <input type="text" id="location">
+                    </div>
+
+                    <div class="form-row">
+                        <label for="dob">Date of Birth</label>
+                        <input type="date" id="dob" disabled>
+                    </div>
+
+                    <button type="submit" id="save-profile-btn" class="save-btn">Save Changes</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Notifications Settings Section -->
+        <div id="notifications-section" class="settings-section">
+            <div class="settings-card">
+                <div class="settings-header">
+                    <div class="settings-icon">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <h3 class="settings-title">Notification Preferences</h3>
+                </div>
+
+                <form id="notifications-form">
+                    <div class="form-row" style="display: flex; align-items: center;">
+                        <input type="checkbox" id="email-notifications" style="width: auto; margin-right: 10px;">
+                        <label for="email-notifications" style="margin-bottom: 0;">Email notifications for bet
+                            results</label>
+                    </div>
+
+                    <div class="form-row" style="display: flex; align-items: center;">
+                        <input type="checkbox" id="market-notifications" style="width: auto; margin-right: 10px;">
+                        <label for="market-notifications" style="margin-bottom: 0;">Notifications for new
+                            markets</label>
+                    </div>
+
+                    <div class="form-row" style="display: flex; align-items: center;">
+                        <input type="checkbox" id="token-notifications" style="width: auto; margin-right: 10px;">
+                        <label for="token-notifications" style="margin-bottom: 0;">Notifications for token price
+                            changes</label>
+                    </div>
+
+                    <button type="submit" id="save-notifications-btn" class="save-btn">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-links">
+                    <h4>PolyPredict</h4>
+                    <p>A decentralized prediction market platform built on Ethereum blockchain.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="dashboard.html">Markets</a></li>
+                        <li><a href="token.html">Tokens</a></li>
+                        <li><a href="index.html#about">About</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Connect With Us</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-discord"></i></a>
+                        <a href="#"><i class="fab fa-telegram"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 PolyPredict. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/security.js"></script>
+    <script>
+        // Check if user is logged in
+        const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+
+        // Redirect if not logged in
+        if (!currentUser) {
+            alert('Please log in to access settings');
+            window.location.href = 'login.html';
+        }
+
+        // Logout functionality
+        document.getElementById('logout-btn').addEventListener('click', function () {
+            sessionStorage.removeItem('currentUser');
+            window.location.href = 'index.html';
+        });
+
+        // Settings navigation
+        const navItems = document.querySelectorAll('.settings-nav-item');
+        const sections = document.querySelectorAll('.settings-section');
+
+        navItems.forEach(item => {
+            item.addEventListener('click', function () {
+                // Remove active class from all items
+                navItems.forEach(i => i.classList.remove('active'));
+
+                // Add active class to clicked item
+                this.classList.add('active');
+
+                // Hide all sections
+                sections.forEach(section => section.classList.remove('active'));
+
+                // Show selected section
+                const sectionId = this.getAttribute('data-section') + '-section';
+                document.getElementById(sectionId).classList.add('active');
+            });
+        });
+
+        // Fill profile form with user data
+        document.getElementById('email').value = currentUser.email;
+        document.getElementById('location').value = currentUser.location || '';
+        document.getElementById('dob').value = currentUser.dob || '';
+
+        // Password strength checker
+        const newPasswordInput = document.getElementById('new-password');
+        const confirmPasswordInput = document.getElementById('confirm-password');
+        const passwordStrengthIndicator = document.getElementById('password-strength');
+        const savePasswordBtn = document.getElementById('save-password-btn');
+
+        // Password requirements
+        const reqLength = document.getElementById('req-length');
+        const reqUppercase = document.getElementById('req-uppercase');
+        const reqLowercase = document.getElementById('req-lowercase');
+        const reqNumber = document.getElementById('req-number');
+
+        newPasswordInput.addEventListener('input', checkPasswordStrength);
+        confirmPasswordInput.addEventListener('input', checkPasswordMatch);
+
+        function checkPasswordStrength() {
+            const password = newPasswordInput.value;
+
+            // Check requirements
+            const hasLength = password.length >= 8;
+            const hasUppercase = /[A-Z]/.test(password);
+            const hasLowercase = /[a-z]/.test(password);
+            const hasNumber = /[0-9]/.test(password);
+
+            // Update requirement indicators
+            updateRequirement(reqLength, hasLength);
+            updateRequirement(reqUppercase, hasUppercase);
+            updateRequirement(reqLowercase, hasLowercase);
+            updateRequirement(reqNumber, hasNumber);
+
+            // Calculate strength
+            let strength = 0;
+            if (hasLength) strength++;
+            if (hasUppercase) strength++;
+            if (hasLowercase) strength++;
+            if (hasNumber) strength++;
+
+            // Update strength indicator
+            if (password.length === 0) {
+                passwordStrengthIndicator.textContent = '';
+                passwordStrengthIndicator.className = 'password-strength';
+            } else if (strength < 2) {
+                passwordStrengthIndicator.textContent = 'Weak password';
+                passwordStrengthIndicator.className = 'password-strength strength-weak';
+            } else if (strength < 4) {
+                passwordStrengthIndicator.textContent = 'Medium password';
+                passwordStrengthIndicator.className = 'password-strength strength-medium';
+            } else {
+                passwordStrengthIndicator.textContent = 'Strong password';
+                passwordStrengthIndicator.className = 'password-strength strength-strong';
+            }
+
+            // Check if passwords match
+            checkPasswordMatch();
+        }
+
+        function updateRequirement(element, isMet) {
+            if (isMet) {
+                element.classList.add('met');
+                element.classList.remove('not-met');
+                element.querySelector('i').className = 'fas fa-check-circle';
+            } else {
+                element.classList.add('not-met');
+                element.classList.remove('met');
+                element.querySelector('i').className = 'fas fa-circle';
+            }
+        }
+
+        function checkPasswordMatch() {
+            const password = newPasswordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
+
+            // Check if both passwords are entered and match
+            const passwordsMatch = password && confirmPassword && password === confirmPassword;
+
+            // Check if password meets requirements
+            const hasLength = password.length >= 8;
+            const hasUppercase = /[A-Z]/.test(password);
+            const hasLowercase = /[a-z]/.test(password);
+            const hasNumber = /[0-9]/.test(password);
+            const meetsRequirements = hasLength && hasUppercase && hasLowercase && hasNumber;
+
+            // Enable/disable save button
+            savePasswordBtn.disabled = !(passwordsMatch && meetsRequirements);
+        }
+
+        // Password form submission
+        document.getElementById('password-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const currentPassword = document.getElementById('current-password').value;
+            const newPassword = document.getElementById('new-password').value;
+
+            // Hash passwords for comparison and storage
+            const hashedCurrentPassword = hashPassword(currentPassword);
+            const hashedNewPassword = hashPassword(newPassword);
+
+            // Verify current password (support both hashed and unhashed during transition)
+            if (currentPassword !== currentUser.password && hashedCurrentPassword !== currentUser.password) {
+                showMessage('Current password is incorrect', 'error');
+                return;
+            }
+
+            // Add CSRF protection
+            const csrfToken = document.querySelector('input[name="csrf_token"]')?.value;
+            if (!csrfToken || !validateCSRFToken(csrfToken)) {
+                showMessage('Security validation failed. Please refresh the page and try again.', 'error');
+                return;
+            }
+
+            // Create a safe copy of the user object to update
+            const userToUpdate = JSON.parse(JSON.stringify(currentUser));
+            userToUpdate.password = hashedNewPassword;
+
+            // Log safely without exposing sensitive data
+            if (typeof safeLog === 'function') {
+                safeLog({ action: 'password_change', userId: userToUpdate.id }, 'Password change requested');
+            }
+
+            // Update password in session storage - don't store the full user object directly
+            currentUser.password = hashedNewPassword;
+            sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
+
+            // Update password in local storage
+            const users = JSON.parse(localStorage.getItem('polypredict_users') || '[]');
+            const userIndex = users.findIndex(u => u.id === currentUser.id);
+            if (userIndex !== -1) {
+                users[userIndex].password = hashedNewPassword;
+                localStorage.setItem('polypredict_users', JSON.stringify(users));
+            }
+
+            // Show success message
+            showMessage('Password updated successfully', 'success');
+
+            // Reset form
+            document.getElementById('password-form').reset();
+            passwordStrengthIndicator.textContent = '';
+            passwordStrengthIndicator.className = 'password-strength';
+            savePasswordBtn.disabled = true;
+
+            // Reset requirement indicators
+            [reqLength, reqUppercase, reqLowercase, reqNumber].forEach(req => {
+                req.classList.remove('met');
+                req.classList.add('not-met');
+                req.querySelector('i').className = 'fas fa-circle';
+            });
+        });
+
+        // Profile form submission
+        document.getElementById('profile-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const location = document.getElementById('location').value;
+
+            // Update profile in session storage
+            currentUser.location = location;
+            sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
+
+            // Update profile in local storage
+            const users = JSON.parse(localStorage.getItem('polypredict_users') || '[]');
+            const userIndex = users.findIndex(u => u.id === currentUser.id);
+            if (userIndex !== -1) {
+                users[userIndex].location = location;
+                localStorage.setItem('polypredict_users', JSON.stringify(users));
+            }
+
+            // Show success message
+            showMessage('Profile updated successfully', 'success');
+        });
+
+        // Notifications form submission
+        document.getElementById('notifications-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const emailNotifications = document.getElementById('email-notifications').checked;
+            const marketNotifications = document.getElementById('market-notifications').checked;
+            const tokenNotifications = document.getElementById('token-notifications').checked;
+
+            // Update notifications in session storage
+            currentUser.notifications = {
+                email: emailNotifications,
+                market: marketNotifications,
+                token: tokenNotifications
+            };
+            sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
+
+            // Update notifications in local storage
+            const users = JSON.parse(localStorage.getItem('polypredict_users') || '[]');
+            const userIndex = users.findIndex(u => u.id === currentUser.id);
+            if (userIndex !== -1) {
+                users[userIndex].notifications = {
+                    email: emailNotifications,
+                    market: marketNotifications,
+                    token: tokenNotifications
+                };
+                localStorage.setItem('polypredict_users', JSON.stringify(users));
+            }
+
+            // Show success message
+            showMessage('Notification preferences updated successfully', 'success');
+        });
+
+        // Load notification preferences
+        if (currentUser.notifications) {
+            document.getElementById('email-notifications').checked = currentUser.notifications.email;
+            document.getElementById('market-notifications').checked = currentUser.notifications.market;
+            document.getElementById('token-notifications').checked = currentUser.notifications.token;
+        }
+
+        // Show message function
+        function showMessage(message, type) {
+            const messageContainer = document.getElementById('message-container');
+            messageContainer.textContent = message;
+            messageContainer.className = 'message-container';
+            messageContainer.classList.add('message-' + type);
+            messageContainer.style.display = 'block';
+
+            // Hide message after 3 seconds
+            setTimeout(() => {
+                messageContainer.style.display = 'none';
+            }, 3000);
+        }
+    </script>
+</body>
+
+</html>

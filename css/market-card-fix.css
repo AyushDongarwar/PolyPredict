@@ -1,0 +1,218 @@
+/* Market Card Fix CSS */
+
+/* Fix market card layout */
+.market-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 300px;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin-bottom: 30px;
+    border: 1px solid #e0e0e0;
+    position: relative;
+}
+
+.market-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* Fix market header */
+.market-header {
+    padding: 18px 20px;
+    border-bottom: 1px solid #f0f0f0;
+    background: linear-gradient(to right, #f9f9f9, #ffffff);
+}
+
+.market-title {
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #333;
+    font-size: 1.1rem;
+    line-height: 1.4;
+}
+
+.market-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.market-meta span:first-child {
+    background-color: rgba(108, 92, 231, 0.1);
+    color: #6c5ce7;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-weight: 500;
+    font-size: 0.75rem;
+}
+
+/* Fix market body */
+.market-body {
+    padding: 20px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.market-description {
+    margin-bottom: 20px;
+    font-size: 0.95rem;
+    color: #555;
+    line-height: 1.5;
+}
+
+/* Fix outcomes */
+.outcomes {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: auto;
+}
+
+.outcome {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 16px;
+    border: 1px solid #eaeaea;
+    border-radius: 8px;
+    margin-bottom: 0;
+    background-color: #fafafa;
+    transition: all 0.2s ease;
+}
+
+.outcome:hover {
+    background-color: #f5f7ff;
+    border-color: #6c5ce7;
+    transform: translateX(3px);
+}
+
+.outcome-name {
+    font-weight: 500;
+    color: #444;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.outcome-odds {
+    font-weight: 600;
+    color: #6c5ce7;
+    background-color: rgba(108, 92, 231, 0.1);
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.9rem;
+}
+
+/* Fix bet button */
+.bet-btn-sm {
+    background-color: #6c5ce7;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.9rem;
+    box-shadow: 0 2px 4px rgba(108, 92, 231, 0.2);
+}
+
+.bet-btn-sm:hover {
+    background-color: #5649c0;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(108, 92, 231, 0.3);
+}
+
+.bet-btn-sm:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 2px rgba(108, 92, 231, 0.2);
+}
+
+/* Fix markets grid */
+.markets-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+}
+
+/* Fix running market style */
+.market-card.running {
+    border-top: 4px solid #00b894;
+}
+
+/* Fix crypto market style */
+.market-card[data-market-id^="crypto"] {
+    border-top: 4px solid #f0932b;
+}
+
+.market-card[data-market-id^="crypto"] .market-meta span:first-child {
+    background-color: rgba(240, 147, 43, 0.1);
+    color: #f0932b;
+}
+
+.market-card[data-market-id^="crypto"] .outcome-odds {
+    background-color: rgba(240, 147, 43, 0.1);
+    color: #f0932b;
+}
+
+.market-card[data-market-id^="crypto"] .bet-btn-sm {
+    background-color: #f0932b;
+    box-shadow: 0 2px 4px rgba(240, 147, 43, 0.2);
+}
+
+.market-card[data-market-id^="crypto"] .bet-btn-sm:hover {
+    background-color: #e67e22;
+    box-shadow: 0 4px 8px rgba(240, 147, 43, 0.3);
+}
+
+/* Fix bettors count badge */
+.bettors-count {
+    background-color: rgba(0, 184, 148, 0.1);
+    color: #00b894;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    margin-left: 8px;
+}
+
+/* Fix responsive layout */
+@media (max-width: 768px) {
+    .markets-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .market-card {
+        min-height: auto;
+    }
+}
+
+/* Fix animation */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.market-card {
+    animation: fadeIn 0.5s ease forwards;
+}
+
+/* Fix market card for different types */
+.market-card.completed {
+    border-top: 4px solid #0984e3;
+}
+
+.market-card.trending {
+    border-top: 4px solid #fdcb6e;
+}
+
+.market-card.upcoming {
+    border-top: 4px solid #6c5ce7;
+}

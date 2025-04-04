@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emergency Login - PolyPredict</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        .container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            width: 100%;
+            max-width: 500px;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #6c5ce7;
+            margin-bottom: 30px;
+        }
+        
+        .warning {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .login-option {
+            background-color: #e9ecef;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .login-option:hover {
+            background-color: #dee2e6;
+            transform: translateY(-2px);
+        }
+        
+        .login-option h2 {
+            margin-top: 0;
+            font-size: 18px;
+            color: #343a40;
+        }
+        
+        .login-option p {
+            margin-bottom: 0;
+            color: #6c757d;
+            font-size: 14px;
+        }
+        
+        .admin-option {
+            background-color: #d4edda;
+            border-left: 4px solid #28a745;
+        }
+        
+        .user-option {
+            background-color: #cce5ff;
+            border-left: 4px solid #007bff;
+        }
+        
+        .reset-option {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+        }
+        
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #6c757d;
+            text-decoration: none;
+        }
+        
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Emergency Login</h1>
+        
+        <div class="warning">
+            <strong>Development Mode Only:</strong> This page bypasses normal authentication for development purposes. Do not use in production.
+        </div>
+        
+        <div class="login-option admin-option" id="admin-login">
+            <h2>Login as Admin</h2>
+            <p>Access the admin dashboard with full privileges</p>
+        </div>
+        
+        <div class="login-option user-option" id="user-login">
+            <h2>Login as Regular User</h2>
+            <p>Access the user dashboard with standard privileges</p>
+        </div>
+        
+        <div class="login-option reset-option" id="reset-all">
+            <h2>Reset All Data</h2>
+            <p>Clear all users and betting data to start fresh</p>
+        </div>
+        
+        <a href="login.html" class="back-link">Return to normal login</a>
+    </div>
+    
+    <script>
+        // Admin login
+        document.getElementById('admin-login').addEventListener('click', function() {
+            // Create admin user
+            const adminUser = {
+                id: 'admin-' + Date.now().toString(),
+                email: 'admin@polypredict.com',
+                password: 'admin123',
+                dob: '1990-01-01',
+                location: 'US',
+                tokenBalance: 1000000, // 1 million tokens
+                isAdmin: true,
+                registeredAt: new Date().toISOString(),
+                transactions: []
+            };
+            
+            // Save to localStorage
+            const users = JSON.parse(localStorage.getItem('polypredict_users') || '[]');
+            
+            // Remove any existing admin
+            const filteredUsers = users.filter(u => u.email !== 'admin@polypredict.com');
+            filteredUsers.push(adminUser);
+            
+            localStorage.setItem('polypredict_users', JSON.stringify(filteredUsers));
+            
+            // Set session
+            sessionStorage.setItem('currentUser', JSON.stringify(adminUser));
+            
+            // Redirect to admin page
+            alert('Logged in as admin. Redirecting to admin dashboard...');
+            window.location.href = 'admin.html';
+        });
+        
+        // User login
+        document.getElementById('user-login').addEventListener('click', function() {
+            // Create regular user
+            const regularUser = {
+                id: 'user-' + Date.now().toString(),
+                email: 'user@example.com',
+                password: 'password123',
+                dob: '1995-05-15',
+                location: 'US',
+                tokenBalance: 100, // 100 tokens
+                isAdmin: false,
+                registeredAt: new Date().toISOString(),
+                transactions: [
+                    {
+                        id: Date.now().toString(),
+                        type: 'Welcome Bonus',
+                        amount: 100,
+                        date: new Date().toISOString(),
+                        status: 'Completed',
+                        details: 'Welcome bonus for new users'
+                    }
+                ]
+            };
+            
+            // Save to localStorage
+            const users = JSON.parse(localStorage.getItem('polypredict_users') || '[]');
+            
+            // Remove any existing user with same email
+            const filteredUsers = users.filter(u => u.email !== 'user@example.com');
+            filteredUsers.push(regularUser);
+            
+            localStorage.setItem('polypredict_users', JSON.stringify(filteredUsers));
+            
+            // Set session
+            sessionStorage.setItem('currentUser', JSON.stringify(regularUser));
+            
+            // Redirect to dashboard
+            alert('Logged in as regular user. Redirecting to dashboard...');
+            window.location.href = 'dashboard.html';
+        });
+        
+        // Reset all data
+        document.getElementById('reset-all').addEventListener('click', function() {
+            if (confirm('Are you sure you want to reset all data? This cannot be undone.')) {
+                localStorage.removeItem('polypredict_users');
+                localStorage.removeItem('polypredict_betting_state');
+                sessionStorage.removeItem('currentUser');
+                alert('All data has been reset. You will be redirected to the login page.');
+                window.location.href = 'login.html';
+            }
+        });
+    </script>
+</body>
+</html>

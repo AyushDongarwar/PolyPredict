@@ -1,0 +1,186 @@
+/* Exact Layout Fix CSS - Override all previous styles */
+
+/* Reset market card to match screenshot exactly */
+.market-card {
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    background-color: white !important;
+    border-radius: 8px !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1) !important;
+    margin-bottom: 20px !important;
+    border: 1px solid #e0e0e0 !important;
+    overflow: hidden !important;
+    position: relative !important;
+    animation: none !important;
+    transform: none !important;
+    transition: none !important;
+}
+
+/* Fix market header */
+.market-header {
+    padding: 15px !important;
+    border-bottom: 1px solid #f0f0f0 !important;
+    background: white !important;
+}
+
+.market-title {
+    font-weight: 600 !important;
+    margin-bottom: 8px !important;
+    color: #333 !important;
+    font-size: 1.1rem !important;
+    line-height: 1.4 !important;
+}
+
+.market-meta {
+    display: flex !important;
+    justify-content: space-between !important;
+    font-size: 0.85rem !important;
+    color: #666 !important;
+}
+
+.market-meta span:first-child {
+    background-color: rgba(108, 92, 231, 0.1) !important;
+    color: #6c5ce7 !important;
+    padding: 3px 8px !important;
+    border-radius: 12px !important;
+    font-weight: 500 !important;
+    font-size: 0.75rem !important;
+}
+
+/* Fix market body */
+.market-body {
+    padding: 15px !important;
+}
+
+.market-description {
+    margin-bottom: 15px !important;
+    font-size: 0.9rem !important;
+    color: #555 !important;
+    line-height: 1.5 !important;
+}
+
+/* Fix outcomes to match screenshot exactly */
+.outcomes {
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.outcome {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 10px 0 !important;
+    border: none !important;
+    border-bottom: 1px solid #eee !important;
+    border-radius: 0 !important;
+    margin-bottom: 0 !important;
+    background-color: transparent !important;
+}
+
+.outcome:last-child {
+    border-bottom: none !important;
+}
+
+.outcome-name {
+    font-weight: 500 !important;
+    color: #444 !important;
+    flex: 1 !important;
+}
+
+.outcome-odds {
+    font-weight: 600 !important;
+    color: #6c5ce7 !important;
+    background-color: rgba(108, 92, 231, 0.1) !important;
+    padding: 4px 10px !important;
+    border-radius: 12px !important;
+    font-size: 0.9rem !important;
+    margin: 0 10px !important;
+}
+
+/* Fix bet button */
+.bet-btn-sm, .place-bet {
+    background-color: #6c5ce7 !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 6px !important;
+    padding: 8px 16px !important;
+    font-weight: 500 !important;
+    cursor: pointer !important;
+    font-size: 0.9rem !important;
+    box-shadow: none !important;
+    transform: none !important;
+    transition: background-color 0.2s ease !important;
+}
+
+.bet-btn-sm:hover, .place-bet:hover {
+    background-color: #5649c0 !important;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* Fix markets grid to match screenshot exactly */
+.markets-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 20px !important;
+    margin-bottom: 40px !important;
+}
+
+/* Fix status badge */
+.status-badge, .open {
+    display: inline-block !important;
+    padding: 3px 8px !important;
+    border-radius: 12px !important;
+    font-size: 0.75rem !important;
+    font-weight: 500 !important;
+    background-color: rgba(0, 184, 148, 0.1) !important;
+    color: #00b894 !important;
+}
+
+/* Fix market footer */
+.market-footer {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 10px 15px !important;
+    border-top: 1px solid #f0f0f0 !important;
+    background-color: #fafafa !important;
+}
+
+/* Fix crypto market style */
+.market-card[data-market-id^="crypto"] .market-meta span:first-child {
+    background-color: rgba(240, 147, 43, 0.1) !important;
+    color: #f0932b !important;
+}
+
+/* Fix responsive layout */
+@media (max-width: 768px) {
+    .markets-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* Fix bettors count badge */
+.bettors-count {
+    display: none !important;
+}
+
+/* Remove all animations */
+* {
+    animation: none !important;
+    transition: none !important;
+}
+
+/* Fix specific layout issues */
+.outcome > div {
+    display: flex !important;
+    align-items: center !important;
+}
+
+/* Fix icons */
+.outcome-name i, .market-meta i {
+    display: none !important;
+}
